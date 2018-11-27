@@ -11,7 +11,7 @@ end DataSelector;
 
 architecture behave of DataSelector is
   begin
-      process(all)
+      process(opcode, Reg_Data_1, Reg_Data_2, se6, se9spl, pc, se9)
       begin
 		  case opcode is
 			  when "0000" => --ADD

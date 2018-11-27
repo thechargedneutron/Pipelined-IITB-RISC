@@ -26,7 +26,7 @@ end ZeroHazardRR;
 
 architecture behave of ZeroHazardRR is
   begin
-      process(RR_Z_data, RR_Need_Z)
+      process(RR_Z_data, RR_Need_Z, EX_Mod_Z, EX_Z_available, EX_Z_Data, MA_Mod_Z, MA_Z_available, MA_Z_Data, WB_Mod_Z, WB_Z_available, WB_Z_Data, Valid_Bit)
       begin
 		  if Valid_Bit = '1' and RR_Need_Z = '1' then
 			  if EX_Mod_Z = '1' then
