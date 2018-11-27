@@ -1,0 +1,34 @@
+Variables to be named
+
+Set 1
+Are you writing to any Reg?  Reg_Write            CONST
+Which Reg?                   Reg_Write_Add        CONST
+Do you have the data that is to be written?     Reg_Write_Available    VARIABLE
+
+Set 2
+Are you modifying Z flag?    Z_Write                CONST
+Has it been calculated?      Z_Available            VARIABLE
+
+
+Set 3
+Can you Change PC?           PC_Change              CONST
+Can you Jump NOW?           PC_Available            VARIABLE
+
+
+
+
+You have the Reg Vaue in SignExtended in ID stage itself
+
+
+
+HAVE YOU DONE IT? Remaining
+
+
+SignalsCheckRR is incomplete and WRONG. Correct it.
+
+Change PC as soon as you get the value to be written in R7.
+
+Register WB ka enable is not clean (read correct)
+
+
+Disable Write Back as stall is achieved.
