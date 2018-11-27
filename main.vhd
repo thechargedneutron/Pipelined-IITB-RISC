@@ -457,6 +457,8 @@ architecture behave of Pipelined_IITB_RISC is
 
 	Interface2_9: oneBitRegister port map(ID_Reg_Read_1, Interface_2_enable, clear, clock, RR_Reg_Read_1);
 	Interface2_10: oneBitRegister port map(ID_Reg_Read_2, Interface_2_enable, clear, clock, RR_Reg_Read_2);
+	Interface2_11: oneBitRegister port map(ID_Read_Z, Interface_2_enable, clear, clock, RR_Read_Z);
+	Interface2_12: oneBitRegister port map(ID_Read_C, Interface_2_enable, clear, clock, RR_Read_C);
 
 	SigCheckRR: SignalsCheckRR port map(RR_instruction(15 downto 12), RR_Reg_Write_Available, RR_Z_Available, RR_PC_Available);
 

@@ -39,7 +39,7 @@ architecture behave of InstructionDecode is
 								else
 									read_c <= '0';
 									read_z <= '0';
-
+								end if;
 								z_write <='1';
                 z_available <= '0';
                 c_write <='1';
@@ -82,6 +82,7 @@ architecture behave of InstructionDecode is
 								else
 									read_c <= '0';
 									read_z <= '0';
+								end if;
 								z_write <='1';
                 z_available <= '0';
                 c_write <='0';
