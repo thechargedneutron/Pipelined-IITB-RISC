@@ -543,6 +543,7 @@ architecture behave of Pipelined_IITB_RISC is
 	Interface4_6: sixteenBitRegister port map(EX_instruction, Interface_4_enable, clear, clock, MA_instruction);
 	temp13 <=   EX_PC_Change and EX_PC_Available and Interface_4_enable;
 	Interface4_7: conditionalsixteenBitRegister port map(EX_ALU_Data_Out, EX_PC,temp13, Interface_4_enable, clear, clock, MA_PC);
+	Interface4_13: sixteenBitRegister port map(EX_ALU_Data_Out, Interface_4_enable, clear, clock, MA_Data_ALU);
 	Interface4_8: sixteenBitRegister port map(EX_Data_3, Interface_4_enable, clear, clock, MA_Data_Non_ALU);
 	Interface4_9: oneBitRegister port map(EX_C_out, Interface_4_enable, clear, clock, MA_C);
 	Interface4_10: oneBitRegister port map(EX_Z_out, Interface_4_enable, clear, clock, MA_Z_in);
@@ -586,11 +587,11 @@ architecture behave of Pipelined_IITB_RISC is
 	StallCondition: CheckStall port map('0', RR_Stall_Bit, EX_Stall_Bit, MA_Stall_Bit, WB_Stall_Bit, Interface_1_enable, Interface_2_enable, Interface_3_enable, Interface_4_enable, Interface_5_enable);
 	--Valid Bits Manipulation
 	RR_Valid_Bit <= '1';
-	temp19 <= RR_Valid_Bit and RR_Stall_Bit;
+	temp19 <= RR_Valid_Bit and (not RR_Stall_Bit);
 	Val_EX: oneBitModifiedRegister port map(temp19, Interface_3_enable, clear, clock, EX_Valid_Bit);
-	temp20 <= EX_Valid_Bit and EX_Stall_Bit;
+	temp20 <= EX_Valid_Bit and (not EX_Stall_Bit);
 	Val_MA: oneBitModifiedRegister port map(temp20, Interface_4_enable, clear, clock, MA_Valid_Bit);
-	temp21 <= MA_Valid_Bit and MA_Stall_Bit;
+	temp21 <= MA_Valid_Bit and (not MA_Stall_Bit);
 	Val_WB: oneBitModifiedRegister port map(temp21, Interface_5_enable, clear, clock, WB_Valid_Bit);
 
 
