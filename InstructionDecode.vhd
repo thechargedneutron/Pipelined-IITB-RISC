@@ -56,7 +56,7 @@ architecture behave of InstructionDecode is
                 reg_write <= '1';
                 reg_write_add <= instruction_in(8 downto 6);
 								reg_read_1 <= '1';
-								reg_read_2 <= '1';
+								reg_read_2 <= '0';
 								read_c <= '0';
 								read_z <= '0';
                 z_write <='1';
@@ -101,7 +101,7 @@ architecture behave of InstructionDecode is
               when "0011" => --LHI
                 reg_write <= '1';
                 reg_write_add <= instruction_in(11 downto 9);
-								reg_read_1 <= '1';
+								reg_read_1 <= '0';
 								reg_read_2 <= '0';
 								read_c <= '0';
 								read_z <= '0';
@@ -119,7 +119,7 @@ architecture behave of InstructionDecode is
               when "0100" => --LW
                 reg_write <= '1';
                 reg_write_add <= instruction_in(11 downto 9);
-								reg_read_1 <= '1';
+								reg_read_1 <= '0';
 								reg_read_2 <= '1';
 								read_c <= '0';
 								read_z <= '0';
@@ -167,7 +167,7 @@ architecture behave of InstructionDecode is
               when "1000" => --JAL
                 reg_write <= '1';
                 reg_write_add <= instruction_in(11 downto 9);
-								reg_read_1 <= '1';
+								reg_read_1 <= '0';
 								reg_read_2 <= '0';
 								read_c <= '0';
 								read_z <= '0';
@@ -180,7 +180,7 @@ architecture behave of InstructionDecode is
               when "1001" => --JLR
                 reg_write <= '1';
                 reg_write_add <= instruction_in(11 downto 9);
-								reg_read_1 <= '1';
+								reg_read_1 <= '0';
 								reg_read_2 <= '1';
 								read_c <= '0';
 								read_z <= '0';
