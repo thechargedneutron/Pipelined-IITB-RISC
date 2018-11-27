@@ -1,0 +1,607 @@
+Analysis & Synthesis report for Pipelined_IITB_RISC
+Tue Nov 27 23:33:25 2018
+Quartus Prime Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Analysis & Synthesis Summary
+  3. Analysis & Synthesis Settings
+  4. Parallel Compilation
+  5. Analysis & Synthesis Source Files Read
+  6. Analysis & Synthesis Resource Usage Summary
+  7. Analysis & Synthesis Resource Utilization by Entity
+  8. General Register Statistics
+  9. Port Connectivity Checks: "oneBitModifiedRegister:Val_WB"
+ 10. Port Connectivity Checks: "CheckStall:StallCondition"
+ 11. Port Connectivity Checks: "oneBitRegister:CarryFlag"
+ 12. Port Connectivity Checks: "sixteenBitRegister:Reg7"
+ 13. Port Connectivity Checks: "WriteBack:RegWriteEnable"
+ 14. Port Connectivity Checks: "SignalsCheckWB:SigCheckWB"
+ 15. Port Connectivity Checks: "sixteenBitRegister:Interface5_6"
+ 16. Port Connectivity Checks: "MemoryAccess:MemAccess"
+ 17. Port Connectivity Checks: "GetCarry:GetC"
+ 18. Port Connectivity Checks: "ZeroHazardRR:ZeroHazard1"
+ 19. Port Connectivity Checks: "DataHazardRR:DataHazard2"
+ 20. Port Connectivity Checks: "DataHazardRR:DataHazard1"
+ 21. Port Connectivity Checks: "SignalsCheckRR:SigCheckRR"
+ 22. Port Connectivity Checks: "InstructionDecode:IDStage"
+ 23. Port Connectivity Checks: "InstructionFetch:IFStage|CodeMemory:CodeMem"
+ 24. Post-Synthesis Netlist Statistics for Top Partition
+ 25. Elapsed Time Per Partition
+ 26. Analysis & Synthesis Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2017  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details.
+
+
+
++----------------------------------------------------------------------------------+
+; Analysis & Synthesis Summary                                                     ;
++------------------------------------+---------------------------------------------+
+; Analysis & Synthesis Status        ; Successful - Tue Nov 27 23:33:25 2018       ;
+; Quartus Prime Version              ; 17.1.0 Build 590 10/25/2017 SJ Lite Edition ;
+; Revision Name                      ; Pipelined_IITB_RISC                         ;
+; Top-level Entity Name              ; Pipelined_IITB_RISC                         ;
+; Family                             ; Cyclone IV E                                ;
+; Total logic elements               ; 0                                           ;
+;     Total combinational functions  ; 0                                           ;
+;     Dedicated logic registers      ; 0                                           ;
+; Total registers                    ; 0                                           ;
+; Total pins                         ; 2                                           ;
+; Total virtual pins                 ; 0                                           ;
+; Total memory bits                  ; 0                                           ;
+; Embedded Multiplier 9-bit elements ; 0                                           ;
+; Total PLLs                         ; 0                                           ;
++------------------------------------+---------------------------------------------+
+
+
++------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Settings                                                                                          ;
++----------------------------------------------------------------------------+---------------------+---------------------+
+; Option                                                                     ; Setting             ; Default Value       ;
++----------------------------------------------------------------------------+---------------------+---------------------+
+; Device                                                                     ; EP4CE22F17C6        ;                     ;
+; Top-level entity name                                                      ; Pipelined_IITB_RISC ; Pipelined_IITB_RISC ;
+; Family name                                                                ; Cyclone IV E        ; Cyclone V           ;
+; Use smart compilation                                                      ; Off                 ; Off                 ;
+; Enable parallel Assembler and TimeQuest Timing Analyzer during compilation ; On                  ; On                  ;
+; Enable compact report table                                                ; Off                 ; Off                 ;
+; Restructure Multiplexers                                                   ; Auto                ; Auto                ;
+; Create Debugging Nodes for IP Cores                                        ; Off                 ; Off                 ;
+; Preserve fewer node names                                                  ; On                  ; On                  ;
+; Intel FPGA IP Evaluation Mode                                              ; Enable              ; Enable              ;
+; Verilog Version                                                            ; Verilog_2001        ; Verilog_2001        ;
+; VHDL Version                                                               ; VHDL_1993           ; VHDL_1993           ;
+; State Machine Processing                                                   ; Auto                ; Auto                ;
+; Safe State Machine                                                         ; Off                 ; Off                 ;
+; Extract Verilog State Machines                                             ; On                  ; On                  ;
+; Extract VHDL State Machines                                                ; On                  ; On                  ;
+; Ignore Verilog initial constructs                                          ; Off                 ; Off                 ;
+; Iteration limit for constant Verilog loops                                 ; 5000                ; 5000                ;
+; Iteration limit for non-constant Verilog loops                             ; 250                 ; 250                 ;
+; Add Pass-Through Logic to Inferred RAMs                                    ; On                  ; On                  ;
+; Infer RAMs from Raw Logic                                                  ; On                  ; On                  ;
+; Parallel Synthesis                                                         ; On                  ; On                  ;
+; DSP Block Balancing                                                        ; Auto                ; Auto                ;
+; NOT Gate Push-Back                                                         ; On                  ; On                  ;
+; Power-Up Don't Care                                                        ; On                  ; On                  ;
+; Remove Redundant Logic Cells                                               ; Off                 ; Off                 ;
+; Remove Duplicate Registers                                                 ; On                  ; On                  ;
+; Ignore CARRY Buffers                                                       ; Off                 ; Off                 ;
+; Ignore CASCADE Buffers                                                     ; Off                 ; Off                 ;
+; Ignore GLOBAL Buffers                                                      ; Off                 ; Off                 ;
+; Ignore ROW GLOBAL Buffers                                                  ; Off                 ; Off                 ;
+; Ignore LCELL Buffers                                                       ; Off                 ; Off                 ;
+; Ignore SOFT Buffers                                                        ; On                  ; On                  ;
+; Limit AHDL Integers to 32 Bits                                             ; Off                 ; Off                 ;
+; Optimization Technique                                                     ; Balanced            ; Balanced            ;
+; Carry Chain Length                                                         ; 70                  ; 70                  ;
+; Auto Carry Chains                                                          ; On                  ; On                  ;
+; Auto Open-Drain Pins                                                       ; On                  ; On                  ;
+; Perform WYSIWYG Primitive Resynthesis                                      ; Off                 ; Off                 ;
+; Auto ROM Replacement                                                       ; On                  ; On                  ;
+; Auto RAM Replacement                                                       ; On                  ; On                  ;
+; Auto DSP Block Replacement                                                 ; On                  ; On                  ;
+; Auto Shift Register Replacement                                            ; Auto                ; Auto                ;
+; Allow Shift Register Merging across Hierarchies                            ; Auto                ; Auto                ;
+; Auto Clock Enable Replacement                                              ; On                  ; On                  ;
+; Strict RAM Replacement                                                     ; Off                 ; Off                 ;
+; Allow Synchronous Control Signals                                          ; On                  ; On                  ;
+; Force Use of Synchronous Clear Signals                                     ; Off                 ; Off                 ;
+; Auto RAM Block Balancing                                                   ; On                  ; On                  ;
+; Auto RAM to Logic Cell Conversion                                          ; Off                 ; Off                 ;
+; Auto Resource Sharing                                                      ; Off                 ; Off                 ;
+; Allow Any RAM Size For Recognition                                         ; Off                 ; Off                 ;
+; Allow Any ROM Size For Recognition                                         ; Off                 ; Off                 ;
+; Allow Any Shift Register Size For Recognition                              ; Off                 ; Off                 ;
+; Use LogicLock Constraints during Resource Balancing                        ; On                  ; On                  ;
+; Ignore translate_off and synthesis_off directives                          ; Off                 ; Off                 ;
+; Timing-Driven Synthesis                                                    ; On                  ; On                  ;
+; Report Parameter Settings                                                  ; On                  ; On                  ;
+; Report Source Assignments                                                  ; On                  ; On                  ;
+; Report Connectivity Checks                                                 ; On                  ; On                  ;
+; Ignore Maximum Fan-Out Assignments                                         ; Off                 ; Off                 ;
+; Synchronization Register Chain Length                                      ; 2                   ; 2                   ;
+; Power Optimization During Synthesis                                        ; Normal compilation  ; Normal compilation  ;
+; HDL message level                                                          ; Level2              ; Level2              ;
+; Suppress Register Optimization Related Messages                            ; Off                 ; Off                 ;
+; Number of Removed Registers Reported in Synthesis Report                   ; 5000                ; 5000                ;
+; Number of Swept Nodes Reported in Synthesis Report                         ; 5000                ; 5000                ;
+; Number of Inverted Registers Reported in Synthesis Report                  ; 100                 ; 100                 ;
+; Clock MUX Protection                                                       ; On                  ; On                  ;
+; Auto Gated Clock Conversion                                                ; Off                 ; Off                 ;
+; Block Design Naming                                                        ; Auto                ; Auto                ;
+; SDC constraint protection                                                  ; Off                 ; Off                 ;
+; Synthesis Effort                                                           ; Auto                ; Auto                ;
+; Shift Register Replacement - Allow Asynchronous Clear Signal               ; On                  ; On                  ;
+; Pre-Mapping Resynthesis Optimization                                       ; Off                 ; Off                 ;
+; Analysis & Synthesis Message Level                                         ; Medium              ; Medium              ;
+; Disable Register Merging Across Hierarchies                                ; Auto                ; Auto                ;
+; Resource Aware Inference For Block RAM                                     ; On                  ; On                  ;
++----------------------------------------------------------------------------+---------------------+---------------------+
+
+
++------------------------------------------+
+; Parallel Compilation                     ;
++----------------------------+-------------+
+; Processors                 ; Number      ;
++----------------------------+-------------+
+; Number detected on machine ; 4           ;
+; Maximum allowed            ; 2           ;
+;                            ;             ;
+; Average used               ; 1.00        ;
+; Maximum used               ; 1           ;
+;                            ;             ;
+; Usage by Processor         ; % Time Used ;
+;     Processor 1            ; 100.0%      ;
++----------------------------+-------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                                                      ;
++-----------------------------------+-----------------+-----------------------+-------------------------------------------------------------------------------------+---------+
+; File Name with User-Entered Path  ; Used in Netlist ; File Type             ; File Name with Absolute Path                                                        ; Library ;
++-----------------------------------+-----------------+-----------------------+-------------------------------------------------------------------------------------+---------+
+; DataMemory.vhd                    ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/DataMemory.vhd                    ;         ;
+; ZeroHazardRR.vhd                  ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/ZeroHazardRR.vhd                  ;         ;
+; WriteBack.vhd                     ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/WriteBack.vhd                     ;         ;
+; UpdatePC.vhd                      ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/UpdatePC.vhd                      ;         ;
+; threeBitRegister.vhd              ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/threeBitRegister.vhd              ;         ;
+; sixteenBitRegister.vhd            ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/sixteenBitRegister.vhd            ;         ;
+; SignExtended9spl.vhd              ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignExtended9spl.vhd              ;         ;
+; SignExtended9.vhd                 ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignExtended9.vhd                 ;         ;
+; SignExtended6.vhd                 ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignExtended6.vhd                 ;         ;
+; SignalsCheckWB.vhd                ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignalsCheckWB.vhd                ;         ;
+; SignalsCheckRR.vhd                ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignalsCheckRR.vhd                ;         ;
+; SignalsCheckMA.vhd                ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignalsCheckMA.vhd                ;         ;
+; SignalsCheckEX.vhd                ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignalsCheckEX.vhd                ;         ;
+; registerFileAccess.vhd            ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/registerFileAccess.vhd            ;         ;
+; oneBitRegister.vhd                ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/oneBitRegister.vhd                ;         ;
+; oneBitModifiedRegister.vhd        ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/oneBitModifiedRegister.vhd        ;         ;
+; MemoryAccess.vhd                  ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/MemoryAccess.vhd                  ;         ;
+; main.vhd                          ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd                          ;         ;
+; InstructionFetch.vhd              ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/InstructionFetch.vhd              ;         ;
+; InstructionDecode.vhd             ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/InstructionDecode.vhd             ;         ;
+; getcarry.vhd                      ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/getcarry.vhd                      ;         ;
+; DataSelector.vhd                  ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/DataSelector.vhd                  ;         ;
+; DataHazardRR.vhd                  ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/DataHazardRR.vhd                  ;         ;
+; DataHazardEX.vhd                  ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/DataHazardEX.vhd                  ;         ;
+; conditionalSixteenBitRegister.vhd ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/conditionalSixteenBitRegister.vhd ;         ;
+; CodeMemory.vhd                    ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/CodeMemory.vhd                    ;         ;
+; CheckStall.vhd                    ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/CheckStall.vhd                    ;         ;
+; ALU.vhd                           ; yes             ; User VHDL File        ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/ALU.vhd                           ;         ;
+; GetMAZero.vhd                     ; yes             ; Auto-Found VHDL File  ; /home/geek-at-work/Desktop/EE-309-Project-2-Final/GetMAZero.vhd                     ;         ;
++-----------------------------------+-----------------+-----------------------+-------------------------------------------------------------------------------------+---------+
+
+
++-----------------------------------------------------+
+; Analysis & Synthesis Resource Usage Summary         ;
++---------------------------------------------+-------+
+; Resource                                    ; Usage ;
++---------------------------------------------+-------+
+;                                             ;       ;
+; Total combinational functions               ; 0     ;
+; Logic element usage by number of LUT inputs ;       ;
+;     -- 4 input functions                    ; 0     ;
+;     -- 3 input functions                    ; 0     ;
+;     -- <=2 input functions                  ; 0     ;
+;                                             ;       ;
+; Logic elements by mode                      ;       ;
+;     -- normal mode                          ; 0     ;
+;     -- arithmetic mode                      ; 0     ;
+;                                             ;       ;
+; Total registers                             ; 0     ;
+;     -- Dedicated logic registers            ; 0     ;
+;     -- I/O registers                        ; 0     ;
+;                                             ;       ;
+; I/O pins                                    ; 2     ;
+;                                             ;       ;
+; Embedded Multiplier 9-bit elements          ; 0     ;
+;                                             ;       ;
+; Maximum fan-out node                        ; clock ;
+; Maximum fan-out                             ; 1     ;
+; Total fan-out                               ; 2     ;
+; Average fan-out                             ; 0.50  ;
++---------------------------------------------+-------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Resource Utilization by Entity                                                                                                                                                               ;
++----------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+------+--------------+----------------------+---------------------+--------------+
+; Compilation Hierarchy Node ; Combinational ALUTs ; Dedicated Logic Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name  ; Entity Name         ; Library Name ;
++----------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+------+--------------+----------------------+---------------------+--------------+
+; |Pipelined_IITB_RISC       ; 0 (0)               ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 2    ; 0            ; |Pipelined_IITB_RISC ; Pipelined_IITB_RISC ; work         ;
++----------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+------+--------------+----------------------+---------------------+--------------+
+Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
+
+
++------------------------------------------------------+
+; General Register Statistics                          ;
++----------------------------------------------+-------+
+; Statistic                                    ; Value ;
++----------------------------------------------+-------+
+; Total registers                              ; 0     ;
+; Number of registers using Synchronous Clear  ; 0     ;
+; Number of registers using Synchronous Load   ; 0     ;
+; Number of registers using Asynchronous Clear ; 0     ;
+; Number of registers using Asynchronous Load  ; 0     ;
+; Number of registers using Clock Enable       ; 0     ;
+; Number of registers using Preset             ; 0     ;
++----------------------------------------------+-------+
+
+
++-----------------------------------------------------------+
+; Port Connectivity Checks: "oneBitModifiedRegister:Val_WB" ;
++------+-------+----------+---------------------------------+
+; Port ; Type  ; Severity ; Details                         ;
++------+-------+----------+---------------------------------+
+; d    ; Input ; Info     ; Stuck at GND                    ;
++------+-------+----------+---------------------------------+
+
+
++-------------------------------------------------------+
+; Port Connectivity Checks: "CheckStall:StallCondition" ;
++----------+-------+----------+-------------------------+
+; Port     ; Type  ; Severity ; Details                 ;
++----------+-------+----------+-------------------------+
+; id_stall ; Input ; Info     ; Stuck at GND            ;
+; wb_stall ; Input ; Info     ; Stuck at GND            ;
++----------+-------+----------+-------------------------+
+
+
++------------------------------------------------------+
+; Port Connectivity Checks: "oneBitRegister:CarryFlag" ;
++------+-------+----------+----------------------------+
+; Port ; Type  ; Severity ; Details                    ;
++------+-------+----------+----------------------------+
+; ld   ; Input ; Info     ; Stuck at GND               ;
++------+-------+----------+----------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "sixteenBitRegister:Reg7"                                                            ;
++------+--------+----------+-------------------------------------------------------------------------------------+
+; Port ; Type   ; Severity ; Details                                                                             ;
++------+--------+----------+-------------------------------------------------------------------------------------+
+; ld   ; Input  ; Info     ; Stuck at VCC                                                                        ;
+; q    ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++---------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "WriteBack:RegWriteEnable"                                                                ;
++-----------+--------+----------+-------------------------------------------------------------------------------------+
+; Port      ; Type   ; Severity ; Details                                                                             ;
++-----------+--------+----------+-------------------------------------------------------------------------------------+
+; r7_enable ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++-----------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "SignalsCheckWB:SigCheckWB"                                                                  ;
++--------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port         ; Type   ; Severity ; Details                                                                             ;
++--------------+--------+----------+-------------------------------------------------------------------------------------+
+; pc_available ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++--------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++--------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "sixteenBitRegister:Interface5_6"                                                        ;
++----------+--------+----------+-------------------------------------------------------------------------------------+
+; Port     ; Type   ; Severity ; Details                                                                             ;
++----------+--------+----------+-------------------------------------------------------------------------------------+
+; q[11..0] ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++----------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------+
+; Port Connectivity Checks: "MemoryAccess:MemAccess" ;
++------------------+-------+----------+--------------+
+; Port             ; Type  ; Severity ; Details      ;
++------------------+-------+----------+--------------+
+; mem_write_enable ; Input ; Info     ; Stuck at GND ;
++------------------+-------+----------+--------------+
+
+
++------------------------------------------------+
+; Port Connectivity Checks: "GetCarry:GetC"      ;
++--------------+-------+----------+--------------+
+; Port         ; Type  ; Severity ; Details      ;
++--------------+-------+----------+--------------+
+; rr_gives_c   ; Input ; Info     ; Stuck at GND ;
+; ex_gives_c   ; Input ; Info     ; Stuck at GND ;
+; ma_gives_c   ; Input ; Info     ; Stuck at GND ;
+; wb_gives_c   ; Input ; Info     ; Stuck at GND ;
+; rr_valid_bit ; Input ; Info     ; Stuck at VCC ;
++--------------+-------+----------+--------------+
+
+
++------------------------------------------------------+
+; Port Connectivity Checks: "ZeroHazardRR:ZeroHazard1" ;
++-----------+-------+----------+-----------------------+
+; Port      ; Type  ; Severity ; Details               ;
++-----------+-------+----------+-----------------------+
+; rr_need_z ; Input ; Info     ; Stuck at GND          ;
+; valid_bit ; Input ; Info     ; Stuck at VCC          ;
++-----------+-------+----------+-----------------------+
+
+
++------------------------------------------------------+
+; Port Connectivity Checks: "DataHazardRR:DataHazard2" ;
++-----------+-------+----------+-----------------------+
+; Port      ; Type  ; Severity ; Details               ;
++-----------+-------+----------+-----------------------+
+; valid_bit ; Input ; Info     ; Stuck at VCC          ;
++-----------+-------+----------+-----------------------+
+
+
++------------------------------------------------------+
+; Port Connectivity Checks: "DataHazardRR:DataHazard1" ;
++-----------+-------+----------+-----------------------+
+; Port      ; Type  ; Severity ; Details               ;
++-----------+-------+----------+-----------------------+
+; valid_bit ; Input ; Info     ; Stuck at VCC          ;
++-----------+-------+----------+-----------------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "SignalsCheckRR:SigCheckRR"                                                                         ;
++---------------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port                ; Type   ; Severity ; Details                                                                             ;
++---------------------+--------+----------+-------------------------------------------------------------------------------------+
+; reg_write_available ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; z_available         ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++---------------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "InstructionDecode:IDStage"                                                                  ;
++--------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port         ; Type   ; Severity ; Details                                                                             ;
++--------------+--------+----------+-------------------------------------------------------------------------------------+
+; read_c       ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; read_z       ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; z_available  ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; c_write      ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; pc_available ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++--------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-------------------------------------------------------------------------+
+; Port Connectivity Checks: "InstructionFetch:IFStage|CodeMemory:CodeMem" ;
++------+-------+----------+-----------------------------------------------+
+; Port ; Type  ; Severity ; Details                                       ;
++------+-------+----------+-----------------------------------------------+
+; din  ; Input ; Info     ; Stuck at GND                                  ;
+; we   ; Input ; Info     ; Stuck at GND                                  ;
+; clk  ; Input ; Info     ; Stuck at GND                                  ;
++------+-------+----------+-----------------------------------------------+
+
+
++-----------------------------------------------------+
+; Post-Synthesis Netlist Statistics for Top Partition ;
++-------------------+---------------------------------+
+; Type              ; Count                           ;
++-------------------+---------------------------------+
+; boundary_port     ; 2                               ;
+;                   ;                                 ;
+; Max LUT depth     ; 0.00                            ;
+; Average LUT depth ; 0.00                            ;
++-------------------+---------------------------------+
+
+
++-------------------------------+
+; Elapsed Time Per Partition    ;
++----------------+--------------+
+; Partition Name ; Elapsed Time ;
++----------------+--------------+
+; Top            ; 00:00:00     ;
++----------------+--------------+
+
+
++-------------------------------+
+; Analysis & Synthesis Messages ;
++-------------------------------+
+Info: *******************************************************************
+Info: Running Quartus Prime Analysis & Synthesis
+    Info: Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
+    Info: Processing started: Tue Nov 27 23:33:12 2018
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off Pipelined_IITB_RISC -c Pipelined_IITB_RISC
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (20030): Parallel compilation is enabled and will use 2 of the 2 processors detected
+Info (12021): Found 2 design units, including 1 entities, in source file DataMemory.vhd
+    Info (12022): Found design unit 1: DataMemory-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/DataMemory.vhd Line: 15
+    Info (12023): Found entity 1: DataMemory File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/DataMemory.vhd Line: 4
+Info (12021): Found 2 design units, including 1 entities, in source file ZeroHazardRR.vhd
+    Info (12022): Found design unit 1: ZeroHazardRR-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/ZeroHazardRR.vhd Line: 27
+    Info (12023): Found entity 1: ZeroHazardRR File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/ZeroHazardRR.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file WriteBack.vhd
+    Info (12022): Found design unit 1: WriteBack-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/WriteBack.vhd Line: 11
+    Info (12023): Found entity 1: WriteBack File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/WriteBack.vhd Line: 4
+Info (12021): Found 2 design units, including 1 entities, in source file UpdatePC.vhd
+    Info (12022): Found design unit 1: UpdatePC-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/UpdatePC.vhd Line: 12
+    Info (12023): Found entity 1: UpdatePC File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/UpdatePC.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file threeBitRegister.vhd
+    Info (12022): Found design unit 1: threeBitRegister-description File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/threeBitRegister.vhd Line: 14
+    Info (12023): Found entity 1: threeBitRegister File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/threeBitRegister.vhd Line: 4
+Info (12021): Found 2 design units, including 1 entities, in source file sixteenBitRegister.vhd
+    Info (12022): Found design unit 1: sixteenBitRegister-description File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/sixteenBitRegister.vhd Line: 14
+    Info (12023): Found entity 1: sixteenBitRegister File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/sixteenBitRegister.vhd Line: 4
+Info (12021): Found 2 design units, including 1 entities, in source file SignExtended9spl.vhd
+    Info (12022): Found design unit 1: SignExtended9spl-description File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignExtended9spl.vhd Line: 11
+    Info (12023): Found entity 1: SignExtended9spl File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignExtended9spl.vhd Line: 4
+Info (12021): Found 2 design units, including 1 entities, in source file SignExtended9.vhd
+    Info (12022): Found design unit 1: SignExtended9-description File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignExtended9.vhd Line: 12
+    Info (12023): Found entity 1: SignExtended9 File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignExtended9.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file SignExtended6.vhd
+    Info (12022): Found design unit 1: SignExtended6-description File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignExtended6.vhd Line: 12
+    Info (12023): Found entity 1: SignExtended6 File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignExtended6.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file SignalsCheckWB.vhd
+    Info (12022): Found design unit 1: SignalsCheckWB-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignalsCheckWB.vhd Line: 14
+    Info (12023): Found entity 1: SignalsCheckWB File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignalsCheckWB.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file SignalsCheckRR.vhd
+    Info (12022): Found design unit 1: SignalsCheckRR-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignalsCheckRR.vhd Line: 14
+    Info (12023): Found entity 1: SignalsCheckRR File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignalsCheckRR.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file SignalsCheckMA.vhd
+    Info (12022): Found design unit 1: SignalsCheckMA-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignalsCheckMA.vhd Line: 14
+    Info (12023): Found entity 1: SignalsCheckMA File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignalsCheckMA.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file SignalsCheckEX.vhd
+    Info (12022): Found design unit 1: SignalsCheckEX-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignalsCheckEX.vhd Line: 14
+    Info (12023): Found entity 1: SignalsCheckEX File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/SignalsCheckEX.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file registerFileAccess.vhd
+    Info (12022): Found design unit 1: registerFileAccess-description File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/registerFileAccess.vhd Line: 12
+    Info (12023): Found entity 1: registerFileAccess File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/registerFileAccess.vhd Line: 4
+Info (12021): Found 2 design units, including 1 entities, in source file oneBitRegister.vhd
+    Info (12022): Found design unit 1: oneBitRegister-description File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/oneBitRegister.vhd Line: 14
+    Info (12023): Found entity 1: oneBitRegister File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/oneBitRegister.vhd Line: 4
+Info (12021): Found 2 design units, including 1 entities, in source file oneBitModifiedRegister.vhd
+    Info (12022): Found design unit 1: oneBitModifiedRegister-description File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/oneBitModifiedRegister.vhd Line: 14
+    Info (12023): Found entity 1: oneBitModifiedRegister File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/oneBitModifiedRegister.vhd Line: 4
+Info (12021): Found 2 design units, including 1 entities, in source file MemoryAccess.vhd
+    Info (12022): Found design unit 1: MemoryAccess-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/MemoryAccess.vhd Line: 15
+    Info (12023): Found entity 1: MemoryAccess File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/MemoryAccess.vhd Line: 4
+Info (12021): Found 2 design units, including 1 entities, in source file main.vhd
+    Info (12022): Found design unit 1: Pipelined_IITB_RISC-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 10
+    Info (12023): Found entity 1: Pipelined_IITB_RISC File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 4
+Info (12021): Found 2 design units, including 1 entities, in source file InstructionFetch.vhd
+    Info (12022): Found design unit 1: InstructionFetch-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/InstructionFetch.vhd Line: 12
+    Info (12023): Found entity 1: InstructionFetch File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/InstructionFetch.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file InstructionDecode.vhd
+    Info (12022): Found design unit 1: InstructionDecode-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/InstructionDecode.vhd Line: 20
+    Info (12023): Found entity 1: InstructionDecode File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/InstructionDecode.vhd Line: 4
+Info (12021): Found 2 design units, including 1 entities, in source file getcarry.vhd
+    Info (12022): Found design unit 1: GetCarry-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/getcarry.vhd Line: 10
+    Info (12023): Found entity 1: GetCarry File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/getcarry.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file DataSelector.vhd
+    Info (12022): Found design unit 1: DataSelector-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/DataSelector.vhd Line: 12
+    Info (12023): Found entity 1: DataSelector File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/DataSelector.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file DataHazardRR.vhd
+    Info (12022): Found design unit 1: DataHazardRR-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/DataHazardRR.vhd Line: 31
+    Info (12023): Found entity 1: DataHazardRR File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/DataHazardRR.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file DataHazardEX.vhd
+    Info (12022): Found design unit 1: DataHazardEX-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/DataHazardEX.vhd Line: 26
+    Info (12023): Found entity 1: DataHazardEX File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/DataHazardEX.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file conditionalSixteenBitRegister.vhd
+    Info (12022): Found design unit 1: conditionalsixteenBitRegister-description File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/conditionalSixteenBitRegister.vhd Line: 16
+    Info (12023): Found entity 1: conditionalsixteenBitRegister File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/conditionalSixteenBitRegister.vhd Line: 4
+Info (12021): Found 2 design units, including 1 entities, in source file CodeMemory.vhd
+    Info (12022): Found design unit 1: CodeMemory-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/CodeMemory.vhd Line: 15
+    Info (12023): Found entity 1: CodeMemory File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/CodeMemory.vhd Line: 4
+Info (12021): Found 2 design units, including 1 entities, in source file CheckStall.vhd
+    Info (12022): Found design unit 1: CheckStall-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/CheckStall.vhd Line: 11
+    Info (12023): Found entity 1: CheckStall File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/CheckStall.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file ALU.vhd
+    Info (12022): Found design unit 1: ALU-behave File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/ALU.vhd Line: 15
+    Info (12023): Found entity 1: ALU File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/ALU.vhd Line: 5
+Info (12127): Elaborating entity "Pipelined_IITB_RISC" for the top level hierarchy
+Warning (10036): Verilog HDL or VHDL warning at main.vhd(281): object "ID_Read_Z" assigned a value but never read File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 281
+Warning (10036): Verilog HDL or VHDL warning at main.vhd(282): object "ID_Read_C" assigned a value but never read File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 282
+Warning (10036): Verilog HDL or VHDL warning at main.vhd(284): object "ID_C_Write" assigned a value but never read File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 284
+Warning (10036): Verilog HDL or VHDL warning at main.vhd(285): object "ID_Z_Available" assigned a value but never read File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 285
+Warning (10036): Verilog HDL or VHDL warning at main.vhd(287): object "ID_PC_Available" assigned a value but never read File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 287
+Warning (10036): Verilog HDL or VHDL warning at main.vhd(300): object "RR_Reg_Write_Available" assigned a value but never read File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 300
+Warning (10541): VHDL Signal Declaration warning at main.vhd(303): used implicit default value for signal "RR_Read_Z" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 303
+Warning (10541): VHDL Signal Declaration warning at main.vhd(304): used implicit default value for signal "RR_Read_C" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 304
+Warning (10036): Verilog HDL or VHDL warning at main.vhd(307): object "RR_Z_Available" assigned a value but never read File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 307
+Warning (10541): VHDL Signal Declaration warning at main.vhd(346): used implicit default value for signal "EX_C_Write" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 346
+Warning (10541): VHDL Signal Declaration warning at main.vhd(356): used implicit default value for signal "EX_C" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 356
+Warning (10541): VHDL Signal Declaration warning at main.vhd(374): used implicit default value for signal "MA_Mem_Write" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 374
+Warning (10541): VHDL Signal Declaration warning at main.vhd(379): used implicit default value for signal "MA_C_Write" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 379
+Warning (10541): VHDL Signal Declaration warning at main.vhd(384): used implicit default value for signal "MA_Stall_Bit" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 384
+Warning (10541): VHDL Signal Declaration warning at main.vhd(394): used implicit default value for signal "MA_Data_ALU" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 394
+Warning (10541): VHDL Signal Declaration warning at main.vhd(407): used implicit default value for signal "WB_C_Write" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 407
+Warning (10036): Verilog HDL or VHDL warning at main.vhd(410): object "WB_PC_Available" assigned a value but never read File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 410
+Warning (10036): Verilog HDL or VHDL warning at main.vhd(430): object "R7" assigned a value but never read File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 430
+Warning (10036): Verilog HDL or VHDL warning at main.vhd(430): object "R7_enable" assigned a value but never read File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 430
+Info (12128): Elaborating entity "InstructionFetch" for hierarchy "InstructionFetch:IFStage" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 442
+Info (12128): Elaborating entity "CodeMemory" for hierarchy "InstructionFetch:IFStage|CodeMemory:CodeMem" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/InstructionFetch.vhd Line: 24
+Info (12128): Elaborating entity "sixteenBitRegister" for hierarchy "sixteenBitRegister:ChangePC" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 443
+Info (12128): Elaborating entity "InstructionDecode" for hierarchy "InstructionDecode:IDStage" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 448
+Warning (10541): VHDL Signal Declaration warning at InstructionDecode.vhd(8): used implicit default value for signal "reg_read_1" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/InstructionDecode.vhd Line: 8
+Warning (10541): VHDL Signal Declaration warning at InstructionDecode.vhd(9): used implicit default value for signal "reg_read_2" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/InstructionDecode.vhd Line: 9
+Warning (10541): VHDL Signal Declaration warning at InstructionDecode.vhd(10): used implicit default value for signal "read_c" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/InstructionDecode.vhd Line: 10
+Warning (10541): VHDL Signal Declaration warning at InstructionDecode.vhd(11): used implicit default value for signal "read_z" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/InstructionDecode.vhd Line: 11
+Info (12128): Elaborating entity "oneBitRegister" for hierarchy "oneBitRegister:Interface2_0" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 450
+Info (12128): Elaborating entity "threeBitRegister" for hierarchy "threeBitRegister:Interface2_1" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 451
+Info (12128): Elaborating entity "SignalsCheckRR" for hierarchy "SignalsCheckRR:SigCheckRR" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 461
+Info (12128): Elaborating entity "registerFileAccess" for hierarchy "registerFileAccess:RF1" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 463
+Info (12128): Elaborating entity "SignExtended6" for hierarchy "SignExtended6:SE6" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 466
+Info (12128): Elaborating entity "SignExtended9" for hierarchy "SignExtended9:SE9" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 467
+Info (12128): Elaborating entity "SignExtended9spl" for hierarchy "SignExtended9spl:SE9_spl" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 468
+Info (12128): Elaborating entity "DataHazardRR" for hierarchy "DataHazardRR:DataHazard1" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 470
+Info (12128): Elaborating entity "ZeroHazardRR" for hierarchy "ZeroHazardRR:ZeroHazard1" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 472
+Info (12128): Elaborating entity "GetCarry" for hierarchy "GetCarry:GetC" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 474
+Info (12128): Elaborating entity "DataSelector" for hierarchy "DataSelector:DataMux" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 476
+Info (12128): Elaborating entity "conditionalsixteenBitRegister" for hierarchy "conditionalsixteenBitRegister:Interface3_7" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 484
+Info (12128): Elaborating entity "ALU" for hierarchy "ALU:ALUBlock" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 492
+Info (12128): Elaborating entity "DataHazardEX" for hierarchy "DataHazardEX:DataHazard3" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 493
+Info (12128): Elaborating entity "SignalsCheckEX" for hierarchy "SignalsCheckEX:SigCheckEX" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 495
+Info (12128): Elaborating entity "SignalsCheckMA" for hierarchy "SignalsCheckMA:SigCheckMA" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 508
+Info (12128): Elaborating entity "MemoryAccess" for hierarchy "MemoryAccess:MemAccess" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 509
+Warning (10492): VHDL Process Statement warning at MemoryAccess.vhd(45): signal "mem_d_op" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/MemoryAccess.vhd Line: 45
+Info (12128): Elaborating entity "DataMemory" for hierarchy "MemoryAccess:MemAccess|DataMemory:mem1" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/MemoryAccess.vhd Line: 28
+Warning (12125): Using design file GetMAZero.vhd, which is not specified as a design file for the current project, but contains definitions for 2 design units and 1 entities in project
+    Info (12022): Found design unit 1: GetMAZero-description File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/GetMAZero.vhd Line: 15
+    Info (12023): Found entity 1: GetMAZero File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/GetMAZero.vhd Line: 5
+Info (12128): Elaborating entity "GetMAZero" for hierarchy "GetMAZero:GetMA_Z" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 510
+Warning (10492): VHDL Process Statement warning at GetMAZero.vhd(21): signal "z_mod" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/GetMAZero.vhd Line: 21
+Info (12128): Elaborating entity "SignalsCheckWB" for hierarchy "SignalsCheckWB:SigCheckWB" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 523
+Info (12128): Elaborating entity "WriteBack" for hierarchy "WriteBack:RegWriteEnable" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 525
+Info (12128): Elaborating entity "UpdatePC" for hierarchy "UpdatePC:PCUpdate" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 534
+Info (12128): Elaborating entity "CheckStall" for hierarchy "CheckStall:StallCondition" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 538
+Info (12128): Elaborating entity "oneBitModifiedRegister" for hierarchy "oneBitModifiedRegister:Val_EX" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 541
+Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
+    Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
+Warning (21074): Design contains 2 input pin(s) that do not drive logic
+    Warning (15610): No output dependent on input pin "clock" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 5
+    Warning (15610): No output dependent on input pin "clear" File: /home/geek-at-work/Desktop/EE-309-Project-2-Final/main.vhd Line: 6
+Info (21057): Implemented 2 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 2 input pins
+    Info (21059): Implemented 0 output pins
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 30 warnings
+    Info: Peak virtual memory: 961 megabytes
+    Info: Processing ended: Tue Nov 27 23:33:25 2018
+    Info: Elapsed time: 00:00:13
+    Info: Total CPU time (on all processors): 00:00:33
+
+
