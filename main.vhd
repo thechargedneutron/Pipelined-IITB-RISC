@@ -74,7 +74,9 @@ architecture behave of Pipelined_IITB_RISC is
 	          z_available: OUT STD_LOGIC;
 	          c_write: OUT STD_LOGIC;
 	          pc_change: OUT STD_LOGIC;
-	          pc_available: OUT STD_LOGIC);
+	          pc_available: OUT STD_LOGIC;
+						ID_Mem_Write: OUT STD_LOGIC);
+
 	end component;
 
 	component SignalsCheckRR is
@@ -275,7 +277,6 @@ architecture behave of Pipelined_IITB_RISC is
 	signal ID_Mem_Write: STD_LOGIC;
 	signal ID_Reg_Write: STD_LOGIC;
 	signal ID_Reg_Write_Add : STD_LOGIC_VECTOR(2 downto 0);
-	signal ID_Reg_Write_Available: STD_LOGIC;
 	signal ID_Reg_Read_1: STD_LOGIC; --Reading from IR 9-10-11
 	signal ID_Reg_Read_2: STD_LOGIC; --Reading from IR 6-7-8
 	signal ID_Read_Z: STD_LOGIC;    --Need Z for computation
@@ -318,9 +319,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal RR_Z_Stall: STD_LOGIC;
 	signal RR_Valid_Bit: STD_LOGIC;
 	--Routine Signals
-	signal RR_Z: STD_LOGIC;
 	signal RR_Z_out : STD_LOGIC;
-	signal RR_C: STD_LOGIC;
 	signal RR_C_out: STD_LOGIC;
 
 	signal RR_Data_1 : STD_LOGIC_VECTOR(15 downto 0);
@@ -341,7 +340,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal EX_Reg_Write_Add: STD_LOGIC_VECTOR(2 downto 0);
 	signal EX_Reg_Write_Available: STD_LOGIC;
 	signal EX_Reg_Read_1: STD_LOGIC; --Reading from IR 9-10-11
-	signal EX_Read_Z: STD_LOGIC;    --Need Z for computation
+	-- signal EX_Read_Z: STD_LOGIC;    --Need Z for computation
 	signal EX_Z_Write: STD_LOGIC;
 	signal EX_C_Write: STD_LOGIC;
 	signal EX_Z_Available: STD_LOGIC;
@@ -351,9 +350,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal EX_Stall_Bit: STD_LOGIC;
 	signal EX_Valid_Bit: STD_LOGIC;
 	--Routine Signals
-	signal EX_Z: STD_LOGIC;
 	signal EX_Z_out : STD_LOGIC;
-	signal EX_C: STD_LOGIC;
 	signal EX_C_in : STD_LOGIC;
 	signal EX_Z_in : STD_LOGIC;
 	signal EX_C_out : STD_LOGIC;
@@ -384,7 +381,6 @@ architecture behave of Pipelined_IITB_RISC is
 	signal MA_Stall_Bit: STD_LOGIC;
 	signal MA_Valid_Bit: STD_LOGIC;
 	--Routine Signals
-	signal MA_Z: STD_LOGIC;
 	signal MA_Z_in: STD_LOGIC;
 	signal MA_Z_out : STD_LOGIC;
 	signal MA_C: STD_LOGIC;
@@ -468,7 +464,7 @@ architecture behave of Pipelined_IITB_RISC is
 	Interface1_0: sixteenBitRegister port map(IF_instruction, Interface_1_enable, clear, clock, ID_instruction);
 	Interface1_1: sixteenBitRegister port map(IF_PC, Interface_1_enable, clear, clock, ID_PC);
 
-	IDStage: InstructionDecode port map(ID_instruction,	ID_Reg_Write, ID_Reg_Write_Add, ID_Reg_Read_1, ID_Reg_Read_2, ID_Read_C, ID_Read_Z, ID_Z_Write, ID_Z_Available, ID_C_Write, ID_PC_Change, ID_PC_Available);
+	IDStage: InstructionDecode port map(ID_instruction,	ID_Reg_Write, ID_Reg_Write_Add, ID_Reg_Read_1, ID_Reg_Read_2, ID_Read_C, ID_Read_Z, ID_Z_Write, ID_Z_Available, ID_C_Write, ID_PC_Change, ID_PC_Available,ID_Mem_Write);
 
 	Interface2_0: oneBitRegister port map(ID_Reg_Write, Interface_2_enable, clear, clock, RR_Reg_Write);
 	Interface2_1: threeBitRegister port map(ID_Reg_Write_Add, Interface_2_enable, clear, clock, RR_Reg_Write_Add);
@@ -482,6 +478,9 @@ architecture behave of Pipelined_IITB_RISC is
 	Interface2_10: oneBitRegister port map(ID_Reg_Read_2, Interface_2_enable, clear, clock, RR_Reg_Read_2);
 	Interface2_11: oneBitRegister port map(ID_Read_Z, Interface_2_enable, clear, clock, RR_Read_Z);
 	Interface2_12: oneBitRegister port map(ID_Read_C, Interface_2_enable, clear, clock, RR_Read_C);
+	Interface2_13: oneBitRegister port map(ID_Mem_Write, Interface_2_enable, clear, clock, RR_Mem_Write);
+	Interface2_14: oneBitRegister port map(ID_C_Write, Interface_2_enable, clear, clock, RR_c_Write);
+
 
 	SigCheckRR: SignalsCheckRR port map(RR_instruction(15 downto 12), RR_Reg_Write_Available, RR_Z_Available, RR_PC_Available);
 
@@ -508,13 +507,14 @@ architecture behave of Pipelined_IITB_RISC is
 	temp8 <= EX_C_Write and EX_Valid_Bit;
 	temp9 <= MA_C_Write and MA_Valid_Bit;
 	temp10 <= WB_C_Write and WB_Valid_Bit;
-	GetC: GetCarry port map(temp7, C, temp8, EX_C, temp9, MA_C, temp10, WB_C, RR_Valid_Bit, RR_C_out);
+	GetC: GetCarry port map(temp7, C, temp8, EX_C_out, temp9, MA_C, temp10, WB_C, RR_Valid_Bit, RR_C_out);
 
 	DataMux: DataSelector port map(RR_instruction(15 downto 12), RR_Reg_Data_Out_1, RR_Reg_Data_Out_2, SE6_op, SE9spl_op, RR_PC, SE9_op, RR_Data_1, RR_Data_2, RR_Data_3);
 
 	Interface3_0: oneBitRegister port map(RR_Reg_Write, Interface_3_enable, clear, clock, EX_Reg_Write);
 	Interface3_1: threeBitRegister port map(RR_Reg_Write_Add, Interface_3_enable, clear, clock, EX_Reg_Write_Add);
 	Interface3_3: oneBitRegister port map(RR_Z_Write, Interface_3_enable, clear, clock, EX_Z_Write);
+	Interface3_4: oneBitRegister port map(RR_Mem_Write, Interface_3_enable, clear, clock, EX_Mem_Write);
 	Interface3_5: oneBitRegister port map(RR_PC_Change, Interface_3_enable, clear, clock, EX_PC_Change);
 	--Data
 	Interface3_6: sixteenBitRegister port map(RR_instruction, Interface_3_enable, clear, clock, EX_instruction);
@@ -526,6 +526,8 @@ architecture behave of Pipelined_IITB_RISC is
 	Interface3_11: oneBitRegister port map(RR_C_out, Interface_3_enable, clear, clock, EX_C_in);
 	Interface3_12: oneBitRegister port map(RR_Z_out, Interface_3_enable, clear, clock, EX_Z_in);
 	Interface3_13: oneBitRegister port map(RR_Reg_Read_1, Interface_3_enable, clear, clock, EX_Reg_Read_1);
+	Interface3_14: oneBitRegister port map(RR_C_Write, Interface_3_enable, clear, clock, EX_C_Write);
+
 
 	ALUBlock: ALU port map(EX_instruction(15 downto 12), EX_instruction(1 downto 0), EX_C_in, EX_Z_in, EX_Data_1, EX_Data_2, EX_ALU_Data_Out, EX_C_out, EX_Z_out);
 	temp12 <= EX_Reg_Read_1 and EX_Valid_Bit;
@@ -544,7 +546,8 @@ architecture behave of Pipelined_IITB_RISC is
 	Interface4_8: sixteenBitRegister port map(EX_Data_3, Interface_4_enable, clear, clock, MA_Data_Non_ALU);
 	Interface4_9: oneBitRegister port map(EX_C_out, Interface_4_enable, clear, clock, MA_C);
 	Interface4_10: oneBitRegister port map(EX_Z_out, Interface_4_enable, clear, clock, MA_Z_in);
-
+	Interface4_11: oneBitRegister port map(EX_Mem_Write, Interface_4_enable, clear, clock, MA_Mem_Write);
+	Interface4_12: oneBitRegister port map(EX_C_Write, Interface_4_enable, clear, clock, MA_C_Write);
 	SigCheckMA: SignalsCheckMA port map(MA_instruction(15 downto 12), MA_Reg_Write_Available, MA_Z_Available, MA_PC_Available);
 	temp14 <=  MA_Valid_Bit and MA_Mem_Write;
 	MemAccess: MemoryAccess port map(MA_instruction(15 downto 12), MA_Data_ALU, MA_Data_Non_ALU, MA_PC,temp14, clock, MA_Data_out);
@@ -561,7 +564,7 @@ architecture behave of Pipelined_IITB_RISC is
 	Interface5_9: oneBitRegister port map(MA_C, Interface_5_enable, clear, clock, WB_C);
 	Interface5_10: oneBitRegister port map(MA_Z_out, Interface_5_enable, clear, clock, WB_Z);
 	Interface5_11: sixteenBitRegister port map(MA_Data_out, Interface_5_enable, clear, clock, WB_Data);
-
+	Interface5_12: oneBitRegister port map(MA_C_Write, Interface_5_enable, clear, clock, WB_C_Write);
 	SigCheckWB: SignalsCheckWB port map(WB_instruction(15 downto 12), WB_Reg_Write_Available, WB_Z_Available, WB_PC_Available);
 	temp16 <= WB_Reg_Write and WB_Valid_Bit;
 	RegWriteEnable: WriteBack port map(WB_Reg_Write_Add, temp16, R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enable, R7_enable);
@@ -578,8 +581,9 @@ architecture behave of Pipelined_IITB_RISC is
 	CarryFlag: oneBitRegister port map(WB_C, temp17, clear, clock, C);
 	temp18 <= WB_Valid_Bit and WB_Z_Write;
 	ZeroFlag: oneBitRegister port map(WB_Z, temp18, clear, clock, Z);
-
-	StallCondition: CheckStall port map('0', RR_Stall_Bit, EX_Stall_Bit, MA_Stall_Bit, '0', Interface_1_enable, Interface_2_enable, Interface_3_enable, Interface_4_enable, Interface_5_enable);
+	MA_Stall_Bit <= '0';
+	WB_Stall_Bit <= '0';
+	StallCondition: CheckStall port map('0', RR_Stall_Bit, EX_Stall_Bit, MA_Stall_Bit, WB_Stall_Bit, Interface_1_enable, Interface_2_enable, Interface_3_enable, Interface_4_enable, Interface_5_enable);
 	--Valid Bits Manipulation
 	RR_Valid_Bit <= '1';
 	temp19 <= RR_Valid_Bit and RR_Stall_Bit;

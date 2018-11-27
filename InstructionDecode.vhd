@@ -13,7 +13,8 @@ entity InstructionDecode is
           z_available: OUT STD_LOGIC;
           c_write: OUT STD_LOGIC;
           pc_change: OUT STD_LOGIC;
-          pc_available: OUT STD_LOGIC);
+          pc_available: OUT STD_LOGIC;
+					ID_Mem_Write: OUT STD_LOGIC);
 end InstructionDecode;
 
 
@@ -49,6 +50,7 @@ architecture behave of InstructionDecode is
                 else
                     pc_change <= '0';
                 end if;
+								ID_Mem_Write <= '0';
 
               when "0001" => --ADI
                 reg_write <= '1';
@@ -66,10 +68,13 @@ architecture behave of InstructionDecode is
                 else
                     pc_change <= '0';
                 end if;
+								ID_Mem_Write <= '0';
 
               when "0010" => --NAND
                 reg_write <= '1';
                 reg_write_add <= instruction_in(5 downto 3);
+								reg_read_1 <= '1';
+								reg_read_2 <= '1';
 								if instruction_in(1 downto 0) = "00" then
 									read_c <= '0';
 									read_z <= '0';
@@ -92,7 +97,7 @@ architecture behave of InstructionDecode is
                 else
                     pc_change <= '0';
                 end if;
-
+								ID_Mem_Write <= '0';
               when "0011" => --LHI
                 reg_write <= '1';
                 reg_write_add <= instruction_in(11 downto 9);
@@ -109,6 +114,7 @@ architecture behave of InstructionDecode is
                 else
                     pc_change <= '0';
                 end if;
+								ID_Mem_Write <='0';
 
               when "0100" => --LW
                 reg_write <= '1';
@@ -126,6 +132,7 @@ architecture behave of InstructionDecode is
                 else
                     pc_change <= '0';
                 end if;
+								ID_Mem_Write <= '0';
 
               when "0101" => --SW
                 reg_write <= '0';
@@ -139,6 +146,7 @@ architecture behave of InstructionDecode is
                 c_write <='0';
                 pc_available <= '0';
                 pc_change <= '0';
+								ID_Mem_Write <= '1';
 
               --when "0110" => --LM
               --when "0111" => --SM
@@ -154,6 +162,7 @@ architecture behave of InstructionDecode is
                 c_write <='0';
                 pc_available <= '0';
                 pc_change <= '0';  --Will get 1 in Execution
+								ID_Mem_Write <= '0';
 
               when "1000" => --JAL
                 reg_write <= '1';
@@ -166,8 +175,8 @@ architecture behave of InstructionDecode is
                 z_available <= '0';
                 c_write <='0';
                 pc_available <= '0';
-				pc_change <= '1';
-
+								pc_change <= '1';
+								ID_Mem_Write <= '0';
               when "1001" => --JLR
                 reg_write <= '1';
                 reg_write_add <= instruction_in(11 downto 9);
@@ -179,7 +188,8 @@ architecture behave of InstructionDecode is
                 z_available <= '0';
                 c_write <='0';
                 pc_available <= '0';
-				pc_change <= '1';
+								pc_change <= '1';
+								ID_Mem_Write <= '0';
 
               when others =>
                 reg_write <= '0';
@@ -193,6 +203,7 @@ architecture behave of InstructionDecode is
                 c_write <='0';
                 pc_available <= '0';
                 pc_change <= '0';
+								ID_Mem_Write <= '0';
           end case;
 		end process;
 end behave;
