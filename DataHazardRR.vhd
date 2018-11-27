@@ -30,7 +30,7 @@ end DataHazardRR;
 
 architecture behave of DataHazardRR is
   begin
-      process(RR_Reg_Write, RR_Reg_Write_Add, EX_Reg_Write)
+      process(RR_Reg_Read, RR_Reg_Read_Add, RR_Reg_Data, EX_Reg_Write,EX_Reg_Write_Add,EX_Reg_Write_Available, EX_Reg_Data, MA_Reg_Write,MA_Reg_Write_Add,MA_Reg_Write_Available, MA_Reg_Data, WB_Reg_Write,WB_Reg_Write_Add,WB_Reg_Write_Available, WB_Reg_Data, Valid_Bit)
       begin
 		  if Valid_Bit = '1' and RR_Reg_Read = '1' then
 			  if EX_Reg_Write = '1' and EX_Reg_Write_Add = RR_Reg_Read_Add then
