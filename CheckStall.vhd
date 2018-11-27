@@ -12,10 +12,10 @@ architecture behave of CheckStall is
   begin
       process(id_stall, rr_stall, ex_stall, ma_stall, wb_stall)
       begin
-          interface1 <= id_stall nand rr_stall nand ex_stall nand ma_stall nand wb_stall;
-		  interface2 <= rr_stall nand ex_stall nand ma_stall nand wb_stall;
-		  interface3 <= ex_stall nand ma_stall nand wb_stall;
-		  interface4 <= ma_stall nand wb_stall;
-		  interface5 <= wb_stall;
+		  interface1 <= ((not id_stall) and ((not rr_stall) and (not ex_stall))) and ((not ma_stall) and (not wb_stall));
+		  interface2 <= ((not rr_stall) and (not ex_stall)) and ((not ma_stall) and (not wb_stall));
+		  interface3 <= (not ex_stall) and ((not ma_stall) and (not wb_stall));
+		  interface4 <= (not ma_stall) and (not wb_stall);
+		  interface5 <= not wb_stall;
 		end process;
 end behave;

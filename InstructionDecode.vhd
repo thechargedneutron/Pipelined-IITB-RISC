@@ -5,13 +5,13 @@ entity InstructionDecode is
 	port (instruction_in : IN STD_LOGIC_VECTOR(15 downto 0);
           reg_write: OUT STD_LOGIC;
           reg_write_add: OUT STD_LOGIC_VECTOR(2 downto 0);
-		  reg_read_1:
-		  reg_read_2:
-		  read_z:
+		  reg_read_1: OUT STD_LOGIC;
+		  reg_read_2: OUT STD_LOGIC;
+		  read_c: OUT STD_LOGIC;
+		  read_z: OUT STD_LOGIC;
           z_write: OUT STD_LOGIC;
           z_available: OUT STD_LOGIC;
           c_write: OUT STD_LOGIC;
-          c_available: OUT STD_LOGIC;
           pc_change: OUT STD_LOGIC;
           pc_available: OUT STD_LOGIC);
 end InstructionDecode;
@@ -28,7 +28,6 @@ architecture behave of InstructionDecode is
                 z_write <='1';
                 z_available <= '0';
                 c_write <='1';
-                c_available <= '0';
                 pc_available <= '0';
                 if instruction_in(5 downto 3) = "111" then
                     pc_change <= '1';
@@ -42,7 +41,6 @@ architecture behave of InstructionDecode is
                 z_write <='1';
                 z_available <= '0';
                 c_write <='1';
-                c_available <= '0';
                 pc_available <= '0';
                 if instruction_in(8 downto 6) = "111" then
                     pc_change <= '1';
@@ -56,7 +54,6 @@ architecture behave of InstructionDecode is
                 z_write <='1';
                 z_available <= '0';
                 c_write <='0';
-                c_available <= '0';
                 pc_available <= '0';
                 if instruction_in(5 downto 3) = "111" then
                     pc_change <= '1';
@@ -70,7 +67,6 @@ architecture behave of InstructionDecode is
                 z_write <='0';
                 z_available <= '0';
                 c_write <='0';
-                c_available <= '0';
                 pc_available <= '0';
                 if instruction_in(11 downto 9) = "111" then
                     pc_change <= '1';
@@ -84,7 +80,6 @@ architecture behave of InstructionDecode is
                 z_write <='1';
                 z_available <= '0';
                 c_write <='0';
-                c_available <= '0';
                 pc_available <= '0';
                 if instruction_in(11 downto 9) = "111" then
                     pc_change <= '1';
@@ -98,7 +93,6 @@ architecture behave of InstructionDecode is
                 z_write <='0';
                 z_available <= '0';
                 c_write <='0';
-                c_available <= '0';
                 pc_available <= '0';
                 pc_change <= '0';
 
@@ -110,7 +104,6 @@ architecture behave of InstructionDecode is
                 z_write <= '0';
                 z_available <= '0';
                 c_write <='0';
-                c_available <= '0';
                 pc_available <= '0';
                 pc_change <= '0';  --Will get 1 in Execution
 
@@ -120,7 +113,6 @@ architecture behave of InstructionDecode is
                 z_write <='0';
                 z_available <= '0';
                 c_write <='0';
-                c_available <= '0';
                 pc_available <= '0';
 				pc_change <= '1';
 
@@ -130,7 +122,6 @@ architecture behave of InstructionDecode is
                 z_write <='0';
                 z_available <= '0';
                 c_write <='0';
-                c_available <= '0';
                 pc_available <= '0';
 				pc_change <= '1';
 
@@ -140,7 +131,6 @@ architecture behave of InstructionDecode is
                 z_write <='0';
                 z_available <= '0';
                 c_write <='0';
-                c_available <= '0';
                 pc_available <= '0';
                 pc_change <= '0';
           end case;

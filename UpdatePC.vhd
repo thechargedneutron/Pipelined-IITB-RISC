@@ -16,7 +16,7 @@ architecture behave of UpdatePC is
       begin
 		  if PC_change = '1' then
 			  PC_new <= PC;
-		  elsif
+		  else
 			  PC_new <= STD_LOGIC_VECTOR(unsigned(PC) + unsigned(one));
 		  end if;
 		end process;
