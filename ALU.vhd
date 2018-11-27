@@ -14,7 +14,7 @@ end ALU;
 
 architecture behave of ALU is
   begin
-      process(all)
+      process(opcode, condition,c_in, z_in, data1, data2)
 	  variable temp_answer: STD_LOGIC_VECTOR(15 downto 0);
       begin
 		  case opcode is

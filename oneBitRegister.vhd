@@ -13,7 +13,7 @@ end oneBitRegister;
 
 architecture description of oneBitRegister is
 		begin
-			process (clk, clr)
+			process (d, ld, clk, clr)
 			begin
 				if clr = '1' then
 					q <= '0';

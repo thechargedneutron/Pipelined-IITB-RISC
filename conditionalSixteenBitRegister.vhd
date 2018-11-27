@@ -15,7 +15,7 @@ end conditionalsixteenBitRegister;
 
 architecture description of conditionalsixteenBitRegister is
 		begin
-			process (clk, clr)
+			process (d, e, ld1, ld2, clk, clr)
 			begin
 				if clr = '1' then
 					q <= "0000000000000000";
