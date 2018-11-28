@@ -458,6 +458,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal temp21 : STD_LOGIC;
 	signal temp22 : STD_LOGIC;
 	signal temp23 : STD_LOGIC;
+	signal temp24 : STD_LOGIC;
 
 
 	----------CONTROL SIGNALS ---------------------
@@ -520,7 +521,8 @@ architecture behave of Pipelined_IITB_RISC is
 
 	DataMux: DataSelector port map(RR_instruction(15 downto 12), RR_Reg_Data_Out_1, RR_Reg_Data_Out_2, SE6_op, SE9spl_op, RR_PC, SE9_op, RR_Data_1, RR_Data_2, RR_Data_3);
 
-	Interface3_0: oneBitRegister port map(RR_Reg_Write, Interface_3_enable, clear, clock, EX_Reg_Write);
+	temp24 <= RR_Reg_Write and ((not RR_Read_Z) or RR_Z_out) and ((not RR_Read_C) or RR_C_out);
+	Interface3_0: oneBitRegister port map(temp24, Interface_3_enable, clear, clock, EX_Reg_Write);
 	Interface3_1: threeBitRegister port map(RR_Reg_Write_Add, Interface_3_enable, clear, clock, EX_Reg_Write_Add);
 	Interface3_3: oneBitRegister port map(RR_Z_Write, Interface_3_enable, clear, clock, EX_Z_Write);
 	Interface3_4: oneBitRegister port map(RR_Mem_Write, Interface_3_enable, clear, clock, EX_Mem_Write);
