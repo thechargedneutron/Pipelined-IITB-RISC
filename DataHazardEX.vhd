@@ -50,7 +50,7 @@ architecture behave of DataHazardEX is
 				end if;
 		  else
 		  	stall <= '0';
-				data_out <= x"0000"; --Dont care
+				data_out <= EX_Reg_Data; --Dont care
 		end if;
 		end process;
 end behave;
