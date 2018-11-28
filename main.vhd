@@ -288,6 +288,39 @@ architecture behave of Pipelined_IITB_RISC is
 				op : OUT STD_LOGIC);
 	end component;
 
+	component PriorityEncoder is
+		port (PriorityEncoderReg : STD_LOGIC_VECTOR(7 downto 0);
+
+					PE_out : OUT STD_LOGIC_VECTOR(2 downto 0);
+	        PE0 : OUT STD_LOGIC);
+	end component;
+
+	component eightBitRegister is
+		port (d : IN STD_LOGIC_VECTOR(7 downto 0);
+					ld : IN STD_LOGIC;
+					clr : IN STD_LOGIC;
+					clk : IN STD_LOGIC;
+
+					q : OUT STD_LOGIC_VECTOR(7 downto 0));
+	end component;
+
+	component conditionalEightBitRegister is
+		port (d : IN STD_LOGIC_VECTOR(7 downto 0);
+					e : IN STD_LOGIC_VECTOR(7 downto 0);
+					ld1 : IN STD_LOGIC;
+					ld2 : IN STD_LOGIC;
+					clr : IN STD_LOGIC;
+					clk : IN STD_LOGIC;
+
+					q : OUT STD_LOGIC_VECTOR(7 downto 0));
+	end component;
+
+	component IDStallBitCheck is
+		port (opcode: IN STD_LOGIC_VECTOR(3 downto 0);
+			  PE0 : IN STD_LOGIC;
+			  stall_bit: OUT STD_LOGIC);
+	end component;
+
 
     --List of all bunch of signals
 
@@ -323,6 +356,14 @@ architecture behave of Pipelined_IITB_RISC is
 	signal ID_Stall_Bit : STD_LOGIC;
 	signal ID_Valid_Bit : STD_LOGIC;
 	signal ID_PC_Stall_Bit : STD_LOGIC;
+
+	signal PriorityEncoderReg : STD_LOGIC_VECTOR(7 downto 0);
+	signal ModifiedPriorityReg : STD_LOGIC_VECTOR(7 downto 0);
+	signal PE_zero_enable : STD_LOGIC;
+	signal PEout : STD_LOGIC_VECTOR(2 downto 0);
+	signal PE0 : STD_LOGIC;
+	signal offset : STD_LOGIC_VECTOR(5 downto 0);
+	signal offset_in : STD_LOGIC_VECTOR(5 downto 0);
 	-------------Ends Instruction Decode Stage--------------
 
 	signal Interface_2_enable: STD_LOGIC;
@@ -512,8 +553,13 @@ architecture behave of Pipelined_IITB_RISC is
 	ChangePC: sixteenBitRegister port map(IF_PC_in, Interface_1_enable, clear, clock, IF_PC);
 
 	Interface1_0: sixteenBitRegister port map(IF_instruction, Interface_1_enable, clear, clock, ID_instruction);
+	Interface1_2: conditionalEightBitRegister port map(IF_instruction(7 downto 0), ModifiedPriorityReg, Interface_1_enable, PE_zero_enable, clear, clock, PriorityEncoderReg);
 	Interface1_1: sixteenBitRegister port map(IF_PC, Interface_1_enable, clear, clock, ID_PC);
 
+	HandlingPE: PriorityEncoder port map(PriorityEncoderReg, PE_out, PE0);
+	ModifyingPE: PriorityModify port map(PriorityEncoderReg, PE_out, ID_instruction(15 downto 12), PE_zero_enable, ModifiedPriorityReg);
+	Offset1: sixBitRegister port map(offset_in, Interface_2_enable, clear, clock, offset);
+	OffsetCalc: CalculateOffset port map(offset, ID_instruction(15 downto 12), PE0, offset_in);
 	IDStage: InstructionDecode port map(ID_instruction,	ID_Reg_Write, ID_Reg_Write_Add, ID_Reg_Read_1, ID_Reg_Read_2, ID_Read_C, ID_Read_Z, ID_Z_Write, ID_Z_Available, ID_C_Write, ID_PC_Change, ID_PC_Available,ID_Mem_Write);
 
 	Interface2_0: oneBitRegister port map(ID_Reg_Write, Interface_2_enable, clear, clock, RR_Reg_Write);
@@ -638,7 +684,7 @@ architecture behave of Pipelined_IITB_RISC is
 	MA_Stall_Bit <= '0';
 	WB_Stall_Bit <= '0';
 	IF_Stall_Bit <= '0';
-	ID_Stall_Bit <= '0';
+	InsDecodeStall: IDStallBitCheck port map(ID_instruction(15 downto 12), PE0, ID_Stall_Bit);
 	StallCondition: CheckStall port map('0', RR_Stall_Bit, EX_Stall_Bit, MA_Stall_Bit, WB_Stall_Bit, Interface_1_enable, Interface_2_enable, Interface_3_enable, Interface_4_enable, Interface_5_enable);
 	--Valid Bits Manipulation
 	IF_Valid_Bit <= '1';
