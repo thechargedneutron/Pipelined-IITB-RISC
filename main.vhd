@@ -282,6 +282,12 @@ architecture behave of Pipelined_IITB_RISC is
 			  op: OUT STD_LOGIC);
 	end component;
 
+	component GetBEQStatus is
+		port (opcode: IN STD_LOGIC_VECTOR(3 downto 0);
+				data : IN STD_LOGIC_VECTOR(15 downto 0);
+				op : OUT STD_LOGIC);
+	end component;
+
 
     --List of all bunch of signals
 
@@ -490,6 +496,9 @@ architecture behave of Pipelined_IITB_RISC is
 	signal temp22 : STD_LOGIC;
 	signal temp23 : STD_LOGIC;
 	signal temp24 : STD_LOGIC;
+	signal temp25 : STD_LOGIC;
+
+	signal BEQ_PC_Change: STD_LOGIC;
 
 
 	----------CONTROL SIGNALS ---------------------
@@ -551,13 +560,15 @@ architecture behave of Pipelined_IITB_RISC is
 	GetC: GetCarry port map(temp7, C, temp8, EX_C_out, temp9, MA_C, temp10, WB_C, RR_Valid_Bit, RR_C_out);
 
 	DataMux: DataSelector port map(RR_instruction(15 downto 12), RR_Reg_Data_Out_1, RR_Reg_Data_Out_2, SE6_op, SE9spl_op, RR_PC, SE9_op, RR_Data_1, RR_Data_2, RR_Data_3);
+	BEQPC : GetBEQStatus port map(RR_instruction(15 downto 12), RR_Data_3, BEQ_PC_Change);
 
 	temp24 <= RR_Reg_Write and ((not RR_Read_Z) or RR_Z_out) and ((not RR_Read_C) or RR_C_out);
 	Interface3_0: oneBitRegister port map(temp24, Interface_3_enable, clear, clock, EX_Reg_Write);
 	Interface3_1: threeBitRegister port map(RR_Reg_Write_Add, Interface_3_enable, clear, clock, EX_Reg_Write_Add);
 	Interface3_3: oneBitRegister port map(RR_Z_Write, Interface_3_enable, clear, clock, EX_Z_Write);
 	Interface3_4: oneBitRegister port map(RR_Mem_Write, Interface_3_enable, clear, clock, EX_Mem_Write);
-	Interface3_5: oneBitRegister port map(RR_PC_Change, Interface_3_enable, clear, clock, EX_PC_Change);
+	temp25 <= RR_PC_Change or BEQ_PC_Change;
+	Interface3_5: oneBitRegister port map(temp25, Interface_3_enable, clear, clock, EX_PC_Change);
 	--Data
 	Interface3_6: sixteenBitRegister port map(RR_instruction, Interface_3_enable, clear, clock, EX_instruction);
 	temp11 <= RR_PC_Change and RR_PC_Available and Interface_3_enable;
