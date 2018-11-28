@@ -266,6 +266,9 @@ architecture behave of Pipelined_IITB_RISC is
 	signal IF_PC: STD_LOGIC_VECTOR(15 downto 0);
 	signal IF_PC_in: STD_LOGIC_VECTOR(15 downto 0);
 	signal IF_instruction: STD_LOGIC_VECTOR(15 downto 0);
+
+	signal IF_Stall_Bit : STD_LOGIC;
+	signal IF_Valid_Bit : STD_LOGIC;
 	-------------Ends Instruction Fetch Stage-----------
 
 	signal Interface_1_enable: STD_LOGIC;
@@ -286,6 +289,9 @@ architecture behave of Pipelined_IITB_RISC is
 	signal ID_Z_Available: STD_LOGIC;
 	signal ID_PC_Change: STD_LOGIC;
 	signal ID_PC_Available: STD_LOGIC;
+
+	signal ID_Stall_Bit : STD_LOGIC;
+	signal ID_Valid_Bit : STD_LOGIC;
 	-------------Ends Instruction Decode Stage--------------
 
 	signal Interface_2_enable: STD_LOGIC;
@@ -450,6 +456,8 @@ architecture behave of Pipelined_IITB_RISC is
 	signal temp19 : STD_LOGIC;
 	signal temp20 : STD_LOGIC;
 	signal temp21 : STD_LOGIC;
+	signal temp22 : STD_LOGIC;
+	signal temp23 : STD_LOGIC;
 
 
 	----------CONTROL SIGNALS ---------------------
@@ -585,16 +593,20 @@ architecture behave of Pipelined_IITB_RISC is
 	ZeroFlag: oneBitRegister port map(WB_Z, temp18, clear, clock, Z);
 	MA_Stall_Bit <= '0';
 	WB_Stall_Bit <= '0';
+	IF_Stall_Bit <= '0';
+	ID_Stall_Bit <= '0';
 	StallCondition: CheckStall port map('0', RR_Stall_Bit, EX_Stall_Bit, MA_Stall_Bit, WB_Stall_Bit, Interface_1_enable, Interface_2_enable, Interface_3_enable, Interface_4_enable, Interface_5_enable);
 	--Valid Bits Manipulation
-	RR_Valid_Bit <= '1';
+	IF_Valid_Bit <= '1';
+	temp22 <= IF_Valid_Bit and (not IF_Stall_Bit);
+	Val_ID: oneBitRegister port map(temp22, Interface_1_enable, clear, clock, ID_Valid_Bit);
+	temp23 <= ID_Valid_Bit and (not ID_Stall_Bit);
+	Val_RR: oneBitRegister port map(temp23, Interface_2_enable, clear, clock, RR_Valid_Bit);
 	temp19 <= RR_Valid_Bit and (not RR_Stall_Bit);
-	Val_EX: oneBitModifiedRegister port map(temp19, Interface_3_enable, clear, clock, EX_Valid_Bit);
+	Val_EX: oneBitRegister port map(temp19, Interface_3_enable, clear, clock, EX_Valid_Bit);
 	temp20 <= EX_Valid_Bit and (not EX_Stall_Bit);
-	Val_MA: oneBitModifiedRegister port map(temp20, Interface_4_enable, clear, clock, MA_Valid_Bit);
+	Val_MA: oneBitRegister port map(temp20, Interface_4_enable, clear, clock, MA_Valid_Bit);
 	temp21 <= MA_Valid_Bit and (not MA_Stall_Bit);
-	Val_WB: oneBitModifiedRegister port map(temp21, Interface_5_enable, clear, clock, WB_Valid_Bit);
-
-
+	Val_WB: oneBitRegister port map(temp21, Interface_5_enable, clear, clock, WB_Valid_Bit);
 
 end behave;
