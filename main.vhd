@@ -26,6 +26,7 @@ architecture behave of Pipelined_IITB_RISC is
 				RR_Valid_Bit : IN STD_LOGIC;
 				RR_Stall_Bit : IN STD_LOGIC;
 				RR_Data_3 : IN STD_LOGIC_VECTOR(15 downto 0);
+				IF_PC_Stall_Bit, ID_PC_Stall_Bit, RR_PC_Stall_Bit, EX_PC_Stall_Bit, MA_PC_Stall_Bit, WB_PC_Stall_Bit: OUT STD_LOGIC;
 	          PC_new : OUT STD_LOGIC_VECTOR(15 downto 0);
 	          instruction: OUT STD_LOGIC_VECTOR(15 downto 0));
 	end component;
@@ -291,6 +292,7 @@ architecture behave of Pipelined_IITB_RISC is
 
 	signal IF_Stall_Bit : STD_LOGIC;
 	signal IF_Valid_Bit : STD_LOGIC;
+	signal IF_PC_Stall_Bit : STD_LOGIC;
 	-------------Ends Instruction Fetch Stage-----------
 
 	signal Interface_1_enable: STD_LOGIC;
@@ -314,6 +316,7 @@ architecture behave of Pipelined_IITB_RISC is
 
 	signal ID_Stall_Bit : STD_LOGIC;
 	signal ID_Valid_Bit : STD_LOGIC;
+	signal ID_PC_Stall_Bit : STD_LOGIC;
 	-------------Ends Instruction Decode Stage--------------
 
 	signal Interface_2_enable: STD_LOGIC;
@@ -343,6 +346,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal SE9spl_op: STD_LOGIC_VECTOR(15 downto 0);
 
 	signal RR_Stall_Bit: STD_LOGIC;
+	signal RR_PC_Stall_Bit: STD_LOGIC;
 	signal RR_Data_Stall_1: STD_LOGIC;
 	signal RR_Data_Stall_2: STD_LOGIC;
 	signal RR_Z_Stall: STD_LOGIC;
@@ -378,6 +382,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal EX_PC_Available: STD_LOGIC;
 
 	signal EX_Stall_Bit: STD_LOGIC;
+	signal EX_PC_Stall_Bit: STD_LOGIC;
 	signal EX_Valid_Bit: STD_LOGIC;
 	--Routine Signals
 	signal EX_Z_out : STD_LOGIC;
@@ -410,6 +415,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal MA_PC_Available: STD_LOGIC;
 
 	signal MA_Stall_Bit: STD_LOGIC;
+	signal MA_PC_Stall_Bit: STD_LOGIC;
 	signal MA_Valid_Bit: STD_LOGIC;
 	--Routine Signals
 	signal MA_Z_in: STD_LOGIC;
@@ -438,6 +444,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal WB_Updated_PC: STD_LOGIC_VECTOR(15 downto 0);
 
 	signal WB_Stall_Bit: STD_LOGIC;
+	signal WB_PC_Stall_Bit: STD_LOGIC;
 	signal WB_Valid_Bit: STD_LOGIC;
 	--Routine Signals
 	signal WB_Z: STD_LOGIC;
@@ -492,7 +499,7 @@ architecture behave of Pipelined_IITB_RISC is
 
 		begin
     ----------REGISTER PORT MAPPINGS---------------
-	IFStage: InstructionFetch port map (IF_PC, MA_PC_Change, MA_PC_Available, MA_Valid_Bit, MA_Stall_Bit, MA_Data_out, EX_PC_Change, EX_PC_Available, EX_Valid_Bit, EX_Stall_Bit, EX_ALU_Data_Out, RR_PC_Change, RR_PC_Available, RR_Valid_Bit, RR_Stall_Bit, RR_Data_3, IF_PC_in, IF_instruction);
+	IFStage: InstructionFetch port map (IF_PC, MA_PC_Change, MA_PC_Available, MA_Valid_Bit, MA_Stall_Bit, MA_Data_out, EX_PC_Change, EX_PC_Available, EX_Valid_Bit, EX_Stall_Bit, EX_ALU_Data_Out, RR_PC_Change, RR_PC_Available, RR_Valid_Bit, RR_Stall_Bit, RR_Data_3, IF_PC_Stall_Bit, ID_PC_Stall_Bit, RR_PC_Stall_Bit, EX_PC_Stall_Bit, MA_PC_Stall_Bit, WB_PC_Stall_Bit, IF_PC_in, IF_instruction);
 	ChangePC: sixteenBitRegister port map(IF_PC_in, Interface_1_enable, clear, clock, IF_PC);
 
 	Interface1_0: sixteenBitRegister port map(IF_instruction, Interface_1_enable, clear, clock, ID_instruction);
@@ -624,15 +631,15 @@ architecture behave of Pipelined_IITB_RISC is
 	StallCondition: CheckStall port map('0', RR_Stall_Bit, EX_Stall_Bit, MA_Stall_Bit, WB_Stall_Bit, Interface_1_enable, Interface_2_enable, Interface_3_enable, Interface_4_enable, Interface_5_enable);
 	--Valid Bits Manipulation
 	IF_Valid_Bit <= '1';
-	temp22 <= IF_Valid_Bit and (not IF_Stall_Bit);
+	temp22 <= IF_Valid_Bit and (not IF_Stall_Bit) and (not IF_PC_Stall_Bit);
 	Val_ID: oneBitRegister port map(temp22, Interface_1_enable, clear, clock, ID_Valid_Bit);
-	temp23 <= ID_Valid_Bit and (not ID_Stall_Bit);
+	temp23 <= ID_Valid_Bit and (not ID_Stall_Bit) and (not ID_PC_Stall_Bit);
 	Val_RR: oneBitRegister port map(temp23, Interface_2_enable, clear, clock, RR_Valid_Bit);
-	temp19 <= RR_Valid_Bit and (not RR_Stall_Bit);
+	temp19 <= RR_Valid_Bit and (not RR_Stall_Bit) and (not RR_PC_Stall_Bit);
 	Val_EX: oneBitRegister port map(temp19, Interface_3_enable, clear, clock, EX_Valid_Bit);
-	temp20 <= EX_Valid_Bit and (not EX_Stall_Bit);
+	temp20 <= EX_Valid_Bit and (not EX_Stall_Bit) and (not EX_PC_Stall_Bit);
 	Val_MA: oneBitRegister port map(temp20, Interface_4_enable, clear, clock, MA_Valid_Bit);
-	temp21 <= MA_Valid_Bit and (not MA_Stall_Bit);
+	temp21 <= MA_Valid_Bit and (not MA_Stall_Bit) and (not MA_PC_Stall_Bit);
 	Val_WB: oneBitRegister port map(temp21, Interface_5_enable, clear, clock, WB_Valid_Bit);
 
 end behave;
