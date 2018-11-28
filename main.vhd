@@ -11,9 +11,25 @@ architecture behave of Pipelined_IITB_RISC is
 
 	component InstructionFetch is
 		port (PC : IN STD_LOGIC_VECTOR(15 downto 0);
+				MA_PC_Change : IN STD_LOGIC;
+				MA_PC_Available : IN STD_LOGIC;
+				MA_Valid_Bit : IN STD_LOGIC;
+				MA_Stall_Bit : IN STD_LOGIC;
+				MA_Data_out : IN STD_LOGIC_VECTOR(15 downto 0);
+				EX_PC_Change : IN STD_LOGIC;
+				EX_PC_Available : IN STD_LOGIC;
+				EX_Valid_Bit : IN STD_LOGIC;
+				EX_Stall_Bit : IN STD_LOGIC;
+				EX_ALU_Data_Out : IN STD_LOGIC_VECTOR(15 downto 0);
+				RR_PC_Change : IN STD_LOGIC;
+				RR_PC_Available : IN STD_LOGIC;
+				RR_Valid_Bit : IN STD_LOGIC;
+				RR_Stall_Bit : IN STD_LOGIC;
+				RR_Data_3 : IN STD_LOGIC_VECTOR(15 downto 0);
 	          PC_new : OUT STD_LOGIC_VECTOR(15 downto 0);
 	          instruction: OUT STD_LOGIC_VECTOR(15 downto 0));
 	end component;
+
 
 	component sixteenBitRegister is
 		port (d : IN STD_LOGIC_VECTOR(15 downto 0);
@@ -475,7 +491,7 @@ architecture behave of Pipelined_IITB_RISC is
 
 		begin
     ----------REGISTER PORT MAPPINGS---------------
-	IFStage: InstructionFetch port map (IF_PC, IF_PC_in, IF_instruction);
+	IFStage: InstructionFetch port map (IF_PC, MA_PC_Change, MA_PC_Available, MA_Valid_Bit, MA_Stall_Bit, MA_Data_out, EX_PC_Change, EX_PC_Available, EX_Valid_Bit, EX_Stall_Bit, EX_ALU_Data_Out, RR_PC_Change, RR_PC_Available, RR_Valid_Bit, RR_Stall_Bit, RR_Data_3, IF_PC_in, IF_instruction);
 	ChangePC: sixteenBitRegister port map(IF_PC_in, Interface_1_enable, clear, clock, IF_PC);
 
 	Interface1_0: sixteenBitRegister port map(IF_instruction, Interface_1_enable, clear, clock, ID_instruction);
