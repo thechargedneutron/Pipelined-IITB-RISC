@@ -328,6 +328,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal RR_Reg_Write_Add : STD_LOGIC_VECTOR(2 downto 0);
 	signal RR_Reg_Write_Available: STD_LOGIC;
 	signal RR_Reg_Read_1: STD_LOGIC; --Reading from IR 9-10-11
+
 	signal RR_Reg_Read_2: STD_LOGIC; --Reading from IR 6-7-8
 	signal RR_Read_Z: STD_LOGIC;    --Need Z for computation
 	signal RR_Read_C: STD_LOGIC;
@@ -368,7 +369,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal EX_Reg_Write_Add: STD_LOGIC_VECTOR(2 downto 0);
 	signal EX_Reg_Write_Available: STD_LOGIC;
 	signal EX_Reg_Read_1: STD_LOGIC; --Reading from IR 9-10-11
-	signal EX_Reg_Read: STD_LOGIC;
+	signal EX_Reg_Read_1_inp: STD_LOGIC;
 	-- signal EX_Read_Z: STD_LOGIC;    --Need Z for computation
 	signal EX_Z_Write: STD_LOGIC;
 	signal EX_C_Write: STD_LOGIC;
@@ -565,7 +566,7 @@ architecture behave of Pipelined_IITB_RISC is
 
 	ALUBlock: ALU port map(EX_instruction(15 downto 12), EX_instruction(1 downto 0), EX_C_in, EX_Z_in, EX_Data_1, EX_Data_2, EX_ALU_Data_Out, EX_C_out, EX_Z_out);
 	temp12 <= EX_Reg_Read_1 and EX_Valid_Bit;
-	DataHazard3: DataHazardEX port map(temp12, EX_Reg_Write_Add, EX_Data_3, MA_Reg_Write, MA_Reg_Write_Add, MA_Reg_Write_Available, MA_Data_out, WB_Reg_Write, WB_Reg_Write_Add, WB_Reg_Write_Available, WB_Data, EX_Valid_Bit, EX_Stall_Bit, EX_Data_3_out);
+	DataHazard3: DataHazardEX port map(temp12, EX_instruction(11 downto 9), EX_Data_3, MA_Reg_Write, MA_Reg_Write_Add, MA_Reg_Write_Available, MA_Data_out, WB_Reg_Write, WB_Reg_Write_Add, WB_Reg_Write_Available, WB_Data, EX_Valid_Bit, EX_Stall_Bit, EX_Data_3_out);
 	ModRegReadEX: GetEXRegReadSignal port map(EX_instruction(15 downto 12), EX_Reg_Read_1_inp, EX_Reg_Read_1);
 	SigCheckEX: SignalsCheckEX port map(EX_instruction(15 downto 12), EX_Reg_Write_Available, EX_Z_Available, EX_PC_Available);
 
