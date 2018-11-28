@@ -259,6 +259,12 @@ architecture behave of Pipelined_IITB_RISC is
 			  interface1, interface2, interface3, interface4, interface5: OUT STD_LOGIC);
 	end component;
 
+	component GetEXRegReadSignal is
+		port (opcode: IN STD_LOGIC_VECTOR(3 downto 0);
+			inp : IN STD_LOGIC;
+			  op: OUT STD_LOGIC);
+	end component;
+
 
     --List of all bunch of signals
 
@@ -346,6 +352,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal EX_Reg_Write_Add: STD_LOGIC_VECTOR(2 downto 0);
 	signal EX_Reg_Write_Available: STD_LOGIC;
 	signal EX_Reg_Read_1: STD_LOGIC; --Reading from IR 9-10-11
+	signal EX_Reg_Read: STD_LOGIC;
 	-- signal EX_Read_Z: STD_LOGIC;    --Need Z for computation
 	signal EX_Z_Write: STD_LOGIC;
 	signal EX_C_Write: STD_LOGIC;
@@ -536,14 +543,14 @@ architecture behave of Pipelined_IITB_RISC is
 	Interface3_10: sixteenBitRegister port map(RR_Data_3, Interface_3_enable, clear, clock, EX_Data_3);
 	Interface3_11: oneBitRegister port map(RR_C_out, Interface_3_enable, clear, clock, EX_C_in);
 	Interface3_12: oneBitRegister port map(RR_Z_out, Interface_3_enable, clear, clock, EX_Z_in);
-	Interface3_13: oneBitRegister port map(RR_Reg_Read_1, Interface_3_enable, clear, clock, EX_Reg_Read_1);
+	Interface3_13: oneBitRegister port map(RR_Reg_Read_1, Interface_3_enable, clear, clock, EX_Reg_Read_1_inp);
 	Interface3_14: oneBitRegister port map(RR_C_Write, Interface_3_enable, clear, clock, EX_C_Write);
 
 
 	ALUBlock: ALU port map(EX_instruction(15 downto 12), EX_instruction(1 downto 0), EX_C_in, EX_Z_in, EX_Data_1, EX_Data_2, EX_ALU_Data_Out, EX_C_out, EX_Z_out);
 	temp12 <= EX_Reg_Read_1 and EX_Valid_Bit;
 	DataHazard3: DataHazardEX port map(temp12, EX_Reg_Write_Add, EX_Data_3, MA_Reg_Write, MA_Reg_Write_Add, MA_Reg_Write_Available, MA_Data_out, WB_Reg_Write, WB_Reg_Write_Add, WB_Reg_Write_Available, WB_Data, EX_Valid_Bit, EX_Stall_Bit, EX_Data_3_out);
-
+	ModRegReadEX: GetEXRegReadSignal port map(EX_instruction(15 downto 12), EX_Reg_Read_1_inp, EX_Reg_Read_1);
 	SigCheckEX: SignalsCheckEX port map(EX_instruction(15 downto 12), EX_Reg_Write_Available, EX_Z_Available, EX_PC_Available);
 
 	Interface4_0: oneBitRegister port map(EX_Reg_Write, Interface_4_enable, clear, clock, MA_Reg_Write);

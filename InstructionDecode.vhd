@@ -137,7 +137,7 @@ architecture behave of InstructionDecode is
               when "0101" => --SW
                 reg_write <= '0';
                 reg_write_add <= "000";
-								reg_read_1 <= '1';
+								reg_read_1 <= '0';
 								reg_read_2 <= '1';
 								read_c <= '0';
 								read_z <= '0';
