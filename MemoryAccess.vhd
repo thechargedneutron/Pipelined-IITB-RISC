@@ -53,10 +53,10 @@ architecture behave of MemoryAccess is
                 ma_reg_write_back_data <= x"0000";
 
               when "1000" => --JAL
-                ma_reg_write_back_data <= pc;
+                ma_reg_write_back_data <= non_alu_out;
 
               when "1001" => --JLR
-                ma_reg_write_back_data <= pc;
+                ma_reg_write_back_data <= alu_out;
 
               when others =>
                 ma_reg_write_back_data <= x"0000";

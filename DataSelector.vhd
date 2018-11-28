@@ -58,8 +58,8 @@ architecture behave of DataSelector is
 
               when "1001" => --JLR
                 op_data_1 <= x"0000";
-				op_data_2 <= Reg_Data_2;
-				op_data_3 <= pc;
+				op_data_2 <= pc;
+				op_data_3 <= Reg_Data_2;
 
               when others =>
                 op_data_1 <= x"0000";
