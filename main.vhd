@@ -721,14 +721,14 @@ architecture behave of Pipelined_IITB_RISC is
 	MA_Stall_Bit <= '0';
 	WB_Stall_Bit <= '0';
 	IF_Stall_Bit <= '0';
-	Mod_PE0 <= ((ModifiedPriorityReg(7) nor ModifiedPriorityReg(6)) nor (ModifiedPriorityReg(5) nor ModifiedPriorityReg(4))) nor ((ModifiedPriorityReg(3) nor ModifiedPriorityReg(2)) nor (ModifiedPriorityReg(1) nor ModifiedPriorityReg(0)));
+	Mod_PE0 <= (not((ModifiedPriorityReg(7) or ModifiedPriorityReg(6)) or (ModifiedPriorityReg(5) or ModifiedPriorityReg(4)) or (ModifiedPriorityReg(3) or ModifiedPriorityReg(2)) or (ModifiedPriorityReg(1) or ModifiedPriorityReg(0))));
 	InsDecodeStall: IDStallBitCheck port map(ID_instruction(15 downto 12), Mod_PE0, ID_Stall_Bit);
 	StallCondition: CheckStall port map(ID_Stall_Bit, RR_Stall_Bit, EX_Stall_Bit, MA_Stall_Bit, WB_Stall_Bit, Interface_1_enable, Interface_2_enable, Interface_3_enable, Interface_4_enable, Interface_5_enable);
 	--Valid Bits Manipulation
 	IF_Valid_Bit <= '1';
 	temp22 <= IF_Valid_Bit and (not IF_Stall_Bit) and (not IF_PC_Stall_Bit);
 	Val_ID: oneBitRegister port map(temp22, Interface_1_enable, clear, clock, ID_Valid_Bit);
-	temp23 <= ID_Valid_Bit and (not ID_Stall_Bit) and (not ID_PC_Stall_Bit);
+	temp23 <= ID_Valid_Bit and (not ID_PC_Stall_Bit);
 	Val_RR: oneBitRegister port map(temp23, Interface_2_enable, clear, clock, RR_Valid_Bit);
 	temp19 <= RR_Valid_Bit and (not RR_Stall_Bit) and (not RR_PC_Stall_Bit);
 	Val_EX: oneBitRegister port map(temp19, Interface_3_enable, clear, clock, EX_Valid_Bit);
