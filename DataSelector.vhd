@@ -3,17 +3,18 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity DataSelector is
-	port (opcode : IN STD_LOGIC_VECTOR(3 downto 0);
-		Reg_Data_1, Reg_Data_2, se6, se9spl, pc, se9: IN STD_LOGIC_VECTOR(15 downto 0);
+	port (ins : IN STD_LOGIC_VECTOR(15 downto 0);
+		RR_LM_Detect : IN STD_LOGIC;
+		Reg_Data_1, Reg_Data_2, se6, se9spl, pc, se9, Temp_Reg: IN STD_LOGIC_VECTOR(15 downto 0);
 		op_data_1, op_data_2, op_data_3: OUT STD_LOGIC_VECTOR(15 downto 0));
 end DataSelector;
 
 
 architecture behave of DataSelector is
   begin
-      process(opcode, Reg_Data_1, Reg_Data_2, se6, se9spl, pc, se9)
+      process(ins, Reg_Data_1, Reg_Data_2, se6, se9spl, pc, se9)
       begin
-		  case opcode is
+		  case ins(15 downto 12) is
 			  when "0000" => --ADD
                 op_data_1 <= Reg_Data_1;
 				op_data_2 <= Reg_Data_2;
@@ -36,7 +37,15 @@ architecture behave of DataSelector is
 
               when "0100" => --LW
                 op_data_1 <= se6;
-				op_data_2 <= Reg_Data_2;
+				if RR_LM_Detect = '1' then
+					if ins(5 downto 0) = "000000" then
+						op_data_2 <= Reg_Data_2;
+					else
+						op_data_2 <= Temp_Reg;
+					end if;
+				else
+					op_data_2 <= Reg_Data_2;
+				end if;
 				op_data_3 <= x"0000";
 
               when "0101" => --SW

@@ -3,6 +3,7 @@ use ieee.std_logic_1164.all;
 
 entity InstructionDecode is
 	port (instruction_in : IN STD_LOGIC_VECTOR(15 downto 0);
+			instruction_dummy_LM: IN STD_LOGIC_VECTOR(15 downto 0);
           reg_write: OUT STD_LOGIC;
           reg_write_add: OUT STD_LOGIC_VECTOR(2 downto 0);
 				  reg_read_1: OUT STD_LOGIC;
@@ -148,7 +149,28 @@ architecture behave of InstructionDecode is
                 pc_change <= '0';
 								ID_Mem_Write <= '1';
 
-              --when "0110" => --LM
+              when "0110" => --LM
+			  	reg_write <= '1';
+                reg_write_add <= instruction_dummy_LM(11 downto 9);
+								reg_read_1 <= '0';
+								if instruction_dummy_LM(5 downto 0) = "000000" then
+									reg_read_2 <= '1';
+								else
+									reg_read_2 <= '0';
+								end if;
+								read_c <= '0';
+								read_z <= '0';
+                z_write <='0';
+                z_available <= '0';
+                c_write <='0';
+                pc_available <= '0';
+                if instruction_dummy_LM(11 downto 9) = "111" then
+                    pc_change <= '1';
+                else
+                    pc_change <= '0';
+                end if;
+								ID_Mem_Write <= '0';
+
               when "0111" => --SM
 			  	reg_write <= '0';
                 reg_write_add <= "000";

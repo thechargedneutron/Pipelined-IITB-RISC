@@ -81,6 +81,7 @@ architecture behave of Pipelined_IITB_RISC is
 
 	component InstructionDecode is
 		port (instruction_in : IN STD_LOGIC_VECTOR(15 downto 0);
+			  instruction_dummy_LM: IN STD_LOGIC_VECTOR(15 downto 0);
 	          reg_write: OUT STD_LOGIC;
 	          reg_write_add: OUT STD_LOGIC_VECTOR(2 downto 0);
 			  reg_read_1: OUT STD_LOGIC;
@@ -223,7 +224,7 @@ architecture behave of Pipelined_IITB_RISC is
 
 
 	component DataSelector is
-		port (opcode : IN STD_LOGIC_VECTOR(3 downto 0);
+		port (ins : IN STD_LOGIC_VECTOR(15 downto 0);
 			Reg_Data_1, Reg_Data_2, se6, se9spl, pc, se9: IN STD_LOGIC_VECTOR(15 downto 0);
 			op_data_1, op_data_2, op_data_3: OUT STD_LOGIC_VECTOR(15 downto 0));
 	end component;
@@ -356,6 +357,13 @@ architecture behave of Pipelined_IITB_RISC is
 			  offset_in: OUT STD_LOGIC_VECTOR(5 downto 0));
 	end component;
 
+	component LMDetectEnable is
+		port (lm_detect: IN STD_LOGIC;
+				interface_enable: IN STD_LOGIC;
+				offset: IN STD_LOGIC_VECTOR(5 downto 0);
+			  op: OUT STD_LOGIC);
+	end component;
+
 
     --List of all bunch of signals
 
@@ -390,6 +398,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal ID_Z_Available: STD_LOGIC;
 	signal ID_PC_Change: STD_LOGIC;
 	signal ID_PC_Available: STD_LOGIC;
+	signal ID_LM_Detect: STD_LOGIC;
 
 	signal ID_Stall_Bit : STD_LOGIC;
 	signal ID_Valid_Bit : STD_LOGIC;
@@ -426,6 +435,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal RR_Z_Available: STD_LOGIC;
 	signal RR_PC_Change: STD_LOGIC;
 	signal RR_PC_Available: STD_LOGIC;
+	signal RR_LM_Detect: STD_LOGIC;
 
 	signal SE6_op: STD_LOGIC_VECTOR(15 downto 0);
 	signal SE9_op: STD_LOGIC_VECTOR(15 downto 0);
@@ -549,7 +559,7 @@ architecture behave of Pipelined_IITB_RISC is
     signal R5 : STD_LOGIC_VECTOR(15 downto 0); signal R5_enable : STD_LOGIC;
     signal R6 : STD_LOGIC_VECTOR(15 downto 0); signal R6_enable : STD_LOGIC;
     signal R7 : STD_LOGIC_VECTOR(15 downto 0); signal R7_enable : STD_LOGIC;
-	signal Temp_Reg : STD_LOGIC_VECTOR(15 downto 0);
+	signal Temp_Reg : STD_LOGIC_VECTOR(15 downto 0); signal Temp_Reg_enable: STD_LOGIC;
 	signal Rf_d1 : STD_LOGIC_VECTOR(15 downto 0);
 	signal Rf_d2 : STD_LOGIC_VECTOR(15 downto 0);
 	signal C : STD_LOGIC;
@@ -601,15 +611,17 @@ architecture behave of Pipelined_IITB_RISC is
 	ModifyingPE: PriorityModify port map(PriorityEncoderReg, PE_out, ID_instruction(15 downto 12), PE_zero_enable, ModifiedPriorityReg);
 	Offset1: sixBitRegister port map(offset_in, Interface_2_enable, clear, clock, offset);
 	OffsetCalc: CalculateOffset port map(offset, ID_instruction(15 downto 12), PE0, offset_in);
-	IDStage: InstructionDecode port map(ID_instruction,	ID_Reg_Write, ID_Reg_Write_Add, ID_Reg_Read_1, ID_Reg_Read_2, ID_Read_C, ID_Read_Z, ID_Z_Write, ID_Z_Available, ID_C_Write, ID_PC_Change, ID_PC_Available,ID_Mem_Write);
+	IDStage: InstructionDecode port map(ID_instruction, ID_dummy_instruction_LM, ID_Reg_Write, ID_Reg_Write_Add, ID_Reg_Read_1, ID_Reg_Read_2, ID_Read_C, ID_Read_Z, ID_Z_Write, ID_Z_Available, ID_C_Write, ID_PC_Change, ID_PC_Available,ID_Mem_Write);
 	ID_dummy_instruction_SM <= "0101" & PE_out & ID_instruction(11 downto 9) & offset;
 	ID_dummy_instruction_LM <= "0100" & PE_out & ID_instruction(11 downto 9) & offset;
+	ID_LM_Detect <= (not ID_instruction(15)) and ID_instruction(14) and ID_instruction(13) and (not ID_instruction(12));
 	InsChoose: ChooseInstruction port map(ID_instruction, ID_dummy_instruction_SM, ID_dummy_instruction_LM, ID_Final_instruction);
 
 	Interface2_0: oneBitRegister port map(ID_Reg_Write, Interface_2_enable, clear, clock, RR_Reg_Write);
 	Interface2_1: threeBitRegister port map(ID_Reg_Write_Add, Interface_2_enable, clear, clock, RR_Reg_Write_Add);
 	Interface2_3: oneBitRegister port map(ID_Z_Write, Interface_2_enable, clear, clock, RR_Z_Write);
 	Interface2_5: oneBitRegister port map(ID_PC_Change, Interface_2_enable, clear, clock, RR_PC_Change);
+	Interface2_6: oneBitRegister port map(ID_LM_Detect, Interface_2_enable, clear, clock, RR_LM_Detect);
 	--Data
 	Interface2_7: sixteenBitRegister port map(ID_PC, Interface_2_enable, clear, clock, RR_PC);
 	Interface2_8: sixteenBitRegister port map(ID_Final_instruction, Interface_2_enable, clear, clock, RR_instruction);
@@ -649,7 +661,7 @@ architecture behave of Pipelined_IITB_RISC is
 	temp10 <= WB_C_Write and WB_Valid_Bit;
 	GetC: GetCarry port map(temp7, C, temp8, EX_C_out, temp9, MA_C, temp10, WB_C, RR_Valid_Bit, RR_C_out);
 
-	DataMux: DataSelector port map(RR_instruction(15 downto 12), RR_Reg_Data_Out_1, RR_Reg_Data_Out_2, SE6_op, SE9spl_op, RR_PC, SE9_op, RR_Data_1, RR_Data_2, RR_Data_3);
+	DataMux: DataSelector port map(RR_instruction, RR_Reg_Data_Out_1, RR_Reg_Data_Out_2, SE6_op, SE9spl_op, RR_PC, SE9_op, RR_Data_1, RR_Data_2, RR_Data_3);
 	BEQPC : GetBEQStatus port map(RR_instruction(15 downto 12), RR_Data_3, BEQ_PC_Change);
 
 	temp24 <= RR_Reg_Write and ((not RR_Read_Z) or RR_Z_out) and ((not RR_Read_C) or RR_C_out);
@@ -670,6 +682,9 @@ architecture behave of Pipelined_IITB_RISC is
 	Interface3_12: oneBitRegister port map(RR_Z_out, Interface_3_enable, clear, clock, EX_Z_in);
 	Interface3_13: oneBitRegister port map(RR_Reg_Read_1, Interface_3_enable, clear, clock, EX_Reg_Read_1_inp);
 	Interface3_14: oneBitRegister port map(RR_C_Write, Interface_3_enable, clear, clock, EX_C_Write);
+	--For LM
+	TempEnable: LMDetectEnable port map(RR_LM_Detect, Interface_3_enable, RR_instruction(5 downto 0), Temp_Reg_enable);
+	Interface3_15: sixteenBitRegister port map(RR_Data_2, Temp_Reg_enable, clear, clock, Temp_Reg);
 
 
 	ALUBlock: ALU port map(EX_instruction(15 downto 12), EX_instruction(1 downto 0), EX_C_in, EX_Z_in, EX_Data_1, EX_Data_2, EX_ALU_Data_Out, EX_C_out, EX_Z_out);
