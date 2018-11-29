@@ -201,8 +201,10 @@ architecture behave of Pipelined_IITB_RISC is
 
 	component DataHazardEX is
 		port (EX_Reg_Read : IN STD_LOGIC; 	 	--Do you need Reg Data?
+		opcode : IN STD_LOGIC_VECTOR(3 downto 0);
 		EX_Reg_Read_Add : IN STD_LOGIC_VECTOR(2 downto 0);
 		EX_Reg_Data : IN STD_LOGIC_VECTOR(15 downto 0);
+		EX_Reg_Data_new : IN STD_LOGIC_VECTOR(15 downto 0);
 
 		MA_Reg_Write : IN STD_LOGIC;
 		MA_Reg_Write_Add : IN STD_LOGIC_VECTOR(2 downto 0);
@@ -323,7 +325,8 @@ architecture behave of Pipelined_IITB_RISC is
 
 	component ChooseInstruction is
 		port (actual_ins : IN STD_LOGIC_VECTOR(15 downto 0);
-				dummy_ins: IN STD_LOGIC_VECTOR(15 downto 0);
+				dummy_ins_SM: IN STD_LOGIC_VECTOR(15 downto 0);
+				dummy_ins_LM: IN STD_LOGIC_VECTOR(15 downto 0);
 				final: OUT STD_LOGIC_VECTOR(15 downto 0));
 	end component;
 
@@ -371,7 +374,8 @@ architecture behave of Pipelined_IITB_RISC is
 	------------Instruction Decode Stage---------------
 	signal ID_PC: STD_LOGIC_VECTOR(15 downto 0);
 	signal ID_instruction: STD_LOGIC_VECTOR(15 downto 0);
-	signal ID_dummy_instruction: STD_LOGIC_VECTOR(15 downto 0);
+	signal ID_dummy_instruction_SM: STD_LOGIC_VECTOR(15 downto 0);
+	signal ID_dummy_instruction_LM: STD_LOGIC_VECTOR(15 downto 0);
 	signal ID_Final_instruction: STD_LOGIC_VECTOR(15 downto 0);
 	--Routine questions
 	signal ID_Mem_Write: STD_LOGIC;
@@ -476,6 +480,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal EX_Data_2 : STD_LOGIC_VECTOR(15 downto 0);
 	signal EX_Data_3 : STD_LOGIC_VECTOR(15 downto 0);
 	signal EX_Data_3_out : STD_LOGIC_VECTOR(15 downto 0);
+	signal EX_Data_3_updated : STD_LOGIC_VECTOR(15 downto 0);
 	signal EX_ALU_Data_Out: STD_LOGIC_VECTOR(15 downto 0);
 	-------------Ends Execution Stage----------------------
 
@@ -544,6 +549,7 @@ architecture behave of Pipelined_IITB_RISC is
     signal R5 : STD_LOGIC_VECTOR(15 downto 0); signal R5_enable : STD_LOGIC;
     signal R6 : STD_LOGIC_VECTOR(15 downto 0); signal R6_enable : STD_LOGIC;
     signal R7 : STD_LOGIC_VECTOR(15 downto 0); signal R7_enable : STD_LOGIC;
+	signal Temp_Reg : STD_LOGIC_VECTOR(15 downto 0);
 	signal Rf_d1 : STD_LOGIC_VECTOR(15 downto 0);
 	signal Rf_d2 : STD_LOGIC_VECTOR(15 downto 0);
 	signal C : STD_LOGIC;
@@ -596,8 +602,9 @@ architecture behave of Pipelined_IITB_RISC is
 	Offset1: sixBitRegister port map(offset_in, Interface_2_enable, clear, clock, offset);
 	OffsetCalc: CalculateOffset port map(offset, ID_instruction(15 downto 12), PE0, offset_in);
 	IDStage: InstructionDecode port map(ID_instruction,	ID_Reg_Write, ID_Reg_Write_Add, ID_Reg_Read_1, ID_Reg_Read_2, ID_Read_C, ID_Read_Z, ID_Z_Write, ID_Z_Available, ID_C_Write, ID_PC_Change, ID_PC_Available,ID_Mem_Write);
-	ID_dummy_instruction <= "0101" & PE_out & ID_instruction(11 downto 9) & offset;
-	InsChoose: ChooseInstruction port map(ID_instruction, ID_dummy_instruction, ID_Final_instruction);
+	ID_dummy_instruction_SM <= "0101" & PE_out & ID_instruction(11 downto 9) & offset;
+	ID_dummy_instruction_LM <= "0100" & PE_out & ID_instruction(11 downto 9) & offset;
+	InsChoose: ChooseInstruction port map(ID_instruction, ID_dummy_instruction_SM, ID_dummy_instruction_LM, ID_Final_instruction);
 
 	Interface2_0: oneBitRegister port map(ID_Reg_Write, Interface_2_enable, clear, clock, RR_Reg_Write);
 	Interface2_1: threeBitRegister port map(ID_Reg_Write_Add, Interface_2_enable, clear, clock, RR_Reg_Write_Add);
@@ -667,7 +674,8 @@ architecture behave of Pipelined_IITB_RISC is
 
 	ALUBlock: ALU port map(EX_instruction(15 downto 12), EX_instruction(1 downto 0), EX_C_in, EX_Z_in, EX_Data_1, EX_Data_2, EX_ALU_Data_Out, EX_C_out, EX_Z_out);
 	temp12 <= EX_Reg_Read_1 and EX_Valid_Bit;
-	DataHazard3: DataHazardEX port map(temp12, EX_instruction(11 downto 9), EX_Data_3, MA_Reg_Write, MA_Reg_Write_Add, MA_Reg_Write_Available, MA_Data_out, WB_Reg_Write, WB_Reg_Write_Add, WB_Reg_Write_Available, WB_Data, EX_Valid_Bit, EX_Stall_Bit, EX_Data_3_out);
+	DataHazard3: DataHazardEX port map(temp12, EX_instruction(15 downto 12), EX_instruction(11 downto 9), EX_Data_3, EX_Data_3_updated, MA_Reg_Write, MA_Reg_Write_Add, MA_Reg_Write_Available, MA_Data_out, WB_Reg_Write, WB_Reg_Write_Add, WB_Reg_Write_Available, WB_Data, EX_Valid_Bit, EX_Stall_Bit, EX_Data_3_out);
+	RFX: registerFileAccess port map(R0, R1, R2, R3, R4, R5, R6, EX_PC, EX_instruction(11 downto 9), EX_Data_3_updated);
 	ModRegReadEX: GetEXRegReadSignal port map(EX_instruction(15 downto 12), EX_Reg_Read_1_inp, EX_Reg_Read_1);
 	SigCheckEX: SignalsCheckEX port map(EX_instruction(15 downto 12), EX_Reg_Write_Available, EX_Z_Available, EX_PC_Available);
 

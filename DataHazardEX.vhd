@@ -4,8 +4,10 @@ use ieee.numeric_std.all;
 
 entity DataHazardEX is
 	port (EX_Reg_Read : IN STD_LOGIC; 	 	--Do you need Reg Data?
+	opcode : IN STD_LOGIC_VECTOR(3 downto 0);
 	EX_Reg_Read_Add : IN STD_LOGIC_VECTOR(2 downto 0);
 	EX_Reg_Data : IN STD_LOGIC_VECTOR(15 downto 0);
+	EX_Reg_Data_new : IN STD_LOGIC_VECTOR(15 downto 0);
 
 	MA_Reg_Write : IN STD_LOGIC;
 	MA_Reg_Write_Add : IN STD_LOGIC_VECTOR(2 downto 0);
@@ -46,7 +48,11 @@ architecture behave of DataHazardEX is
 				  end if;
 				else
 					stall <= '0';
-					data_out <= EX_Reg_Data;
+					if opcode = "0101" then
+						data_out <= EX_Reg_Data_new;
+					else
+						data_out <= EX_Reg_Data;
+					end if;
 				end if;
 		  else
 		  	stall <= '0';
