@@ -149,7 +149,19 @@ architecture behave of InstructionDecode is
 								ID_Mem_Write <= '1';
 
               --when "0110" => --LM
-              --when "0111" => --SM
+              when "0111" => --SM
+			  	reg_write <= '0';
+                reg_write_add <= "000";
+								reg_read_1 <= '0';
+								reg_read_2 <= '1';
+								read_c <= '0';
+								read_z <= '0';
+                z_write <='0';
+                z_available <= '0';
+                c_write <='0';
+                pc_available <= '0';
+                pc_change <= '0';
+								ID_Mem_Write <= '1';
               when "1100" => --BEQ
                 reg_write <= '0';
                 reg_write_add <= "000";

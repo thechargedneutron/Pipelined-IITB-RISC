@@ -396,6 +396,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal PE_zero_enable : STD_LOGIC;
 	signal PE_out : STD_LOGIC_VECTOR(2 downto 0);
 	signal PE0 : STD_LOGIC;
+	signal Mod_PE0 : STD_LOGIC;
 	signal offset : STD_LOGIC_VECTOR(5 downto 0);
 	signal offset_in : STD_LOGIC_VECTOR(5 downto 0);
 	-------------Ends Instruction Decode Stage--------------
@@ -595,7 +596,7 @@ architecture behave of Pipelined_IITB_RISC is
 	Offset1: sixBitRegister port map(offset_in, Interface_2_enable, clear, clock, offset);
 	OffsetCalc: CalculateOffset port map(offset, ID_instruction(15 downto 12), PE0, offset_in);
 	IDStage: InstructionDecode port map(ID_instruction,	ID_Reg_Write, ID_Reg_Write_Add, ID_Reg_Read_1, ID_Reg_Read_2, ID_Read_C, ID_Read_Z, ID_Z_Write, ID_Z_Available, ID_C_Write, ID_PC_Change, ID_PC_Available,ID_Mem_Write);
-	ID_dummy_instruction <= "0100" & PE_out & ID_instruction(11 downto 9) & offset;
+	ID_dummy_instruction <= "0101" & PE_out & ID_instruction(11 downto 9) & offset;
 	InsChoose: ChooseInstruction port map(ID_instruction, ID_dummy_instruction, ID_Final_instruction);
 
 	Interface2_0: oneBitRegister port map(ID_Reg_Write, Interface_2_enable, clear, clock, RR_Reg_Write);
@@ -720,8 +721,9 @@ architecture behave of Pipelined_IITB_RISC is
 	MA_Stall_Bit <= '0';
 	WB_Stall_Bit <= '0';
 	IF_Stall_Bit <= '0';
-	InsDecodeStall: IDStallBitCheck port map(ID_instruction(15 downto 12), PE0, ID_Stall_Bit);
-	StallCondition: CheckStall port map('0', RR_Stall_Bit, EX_Stall_Bit, MA_Stall_Bit, WB_Stall_Bit, Interface_1_enable, Interface_2_enable, Interface_3_enable, Interface_4_enable, Interface_5_enable);
+	Mod_PE0 <= ((ModifiedPriorityReg(7) nor ModifiedPriorityReg(6)) nor (ModifiedPriorityReg(5) nor ModifiedPriorityReg(4))) nor ((ModifiedPriorityReg(3) nor ModifiedPriorityReg(2)) nor (ModifiedPriorityReg(1) nor ModifiedPriorityReg(0)));
+	InsDecodeStall: IDStallBitCheck port map(ID_instruction(15 downto 12), Mod_PE0, ID_Stall_Bit);
+	StallCondition: CheckStall port map(ID_Stall_Bit, RR_Stall_Bit, EX_Stall_Bit, MA_Stall_Bit, WB_Stall_Bit, Interface_1_enable, Interface_2_enable, Interface_3_enable, Interface_4_enable, Interface_5_enable);
 	--Valid Bits Manipulation
 	IF_Valid_Bit <= '1';
 	temp22 <= IF_Valid_Bit and (not IF_Stall_Bit) and (not IF_PC_Stall_Bit);
