@@ -267,7 +267,9 @@ architecture behave of Pipelined_IITB_RISC is
 
 	component UpdatePC is
 		port (PC : IN STD_LOGIC_VECTOR(15 downto 0);
+					Old_PC: IN STD_LOGIC_VECTOR(15 downto 0);
 	          PC_change : IN STD_LOGIC;
+						lm_or_sm : IN STD_LOGIC;
 	          PC_new: OUT STD_LOGIC_VECTOR(15 downto 0));
 	end component;
 
@@ -401,6 +403,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal ID_PC_Change: STD_LOGIC;
 	signal ID_PC_Available: STD_LOGIC;
 	signal ID_LM_Detect: STD_LOGIC;
+	signal ID_LM_or_SM: STD_LOGIC;
 
 	signal ID_Stall_Bit : STD_LOGIC;
 	signal ID_Valid_Bit : STD_LOGIC;
@@ -438,6 +441,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal RR_PC_Change: STD_LOGIC;
 	signal RR_PC_Available: STD_LOGIC;
 	signal RR_LM_Detect: STD_LOGIC;
+	signal RR_LM_or_SM: STD_LOGIC;
 
 	signal SE6_op: STD_LOGIC_VECTOR(15 downto 0);
 	signal SE9_op: STD_LOGIC_VECTOR(15 downto 0);
@@ -494,6 +498,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal EX_Data_3_out : STD_LOGIC_VECTOR(15 downto 0);
 	signal EX_Data_3_updated : STD_LOGIC_VECTOR(15 downto 0);
 	signal EX_ALU_Data_Out: STD_LOGIC_VECTOR(15 downto 0);
+	signal EX_LM_or_SM: STD_LOGIC;
 	-------------Ends Execution Stage----------------------
 
 	signal Interface_4_enable: STD_LOGIC;
@@ -524,6 +529,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal MA_Data_out: STD_LOGIC_VECTOR(15 downto 0);
 	signal MA_Data_Non_ALU : STD_LOGIC_VECTOR(15 downto 0);
 	signal MA_Data_ALU: STD_LOGIC_VECTOR (15 downto 0);
+	signal MA_LM_or_SM: STD_LOGIC;
 	------------Ends Memory Access Stage----------------
 
 	signal Interface_5_enable: STD_LOGIC;
@@ -545,6 +551,7 @@ architecture behave of Pipelined_IITB_RISC is
 	signal WB_Stall_Bit: STD_LOGIC;
 	signal WB_PC_Stall_Bit: STD_LOGIC;
 	signal WB_Valid_Bit: STD_LOGIC;
+	signal WB_LM_or_SM: STD_LOGIC;
 	--Routine Signals
 	signal WB_Z: STD_LOGIC;
 	signal WB_C: STD_LOGIC;
@@ -617,6 +624,7 @@ architecture behave of Pipelined_IITB_RISC is
 	ID_dummy_instruction_SM <= "0101" & PE_out & ID_instruction(11 downto 9) & offset;
 	ID_dummy_instruction_LM <= "0100" & PE_out & ID_instruction(11 downto 9) & offset;
 	ID_LM_Detect <= (not ID_instruction(15)) and ID_instruction(14) and ID_instruction(13) and (not ID_instruction(12));
+	ID_LM_or_SM <= (not ID_instruction(15)) and ID_instruction(14) and ID_instruction(13);
 	InsChoose: ChooseInstruction port map(ID_instruction, ID_dummy_instruction_SM, ID_dummy_instruction_LM, ID_Final_instruction);
 
 	Interface2_0: oneBitRegister port map(ID_Reg_Write, Interface_2_enable, clear, clock, RR_Reg_Write);
@@ -624,6 +632,7 @@ architecture behave of Pipelined_IITB_RISC is
 	Interface2_3: oneBitRegister port map(ID_Z_Write, Interface_2_enable, clear, clock, RR_Z_Write);
 	Interface2_5: oneBitRegister port map(ID_PC_Change, Interface_2_enable, clear, clock, RR_PC_Change);
 	Interface2_6: oneBitRegister port map(ID_LM_Detect, Interface_2_enable, clear, clock, RR_LM_Detect);
+	Interface2_15: oneBitRegister port map(ID_LM_or_SM, Interface_2_enable, clear, clock, RR_LM_or_SM);
 	--Data
 	Interface2_7: sixteenBitRegister port map(ID_PC, Interface_2_enable, clear, clock, RR_PC);
 	Interface2_8: sixteenBitRegister port map(ID_Final_instruction, Interface_2_enable, clear, clock, RR_instruction);
@@ -687,6 +696,7 @@ architecture behave of Pipelined_IITB_RISC is
 	--For LM
 	TempEnable: LMDetectEnable port map(RR_LM_Detect, Interface_3_enable, RR_instruction(5 downto 0), Temp_Reg_enable);
 	Interface3_15: sixteenBitRegister port map(RR_Data_2, Temp_Reg_enable, clear, clock, Temp_Reg);
+	Interface3_16: oneBitRegister port map(RR_LM_or_SM, Interface_3_enable, clear, clock, EX_LM_or_SM);
 
 
 	ALUBlock: ALU port map(EX_instruction(15 downto 12), EX_instruction(1 downto 0), EX_C_in, EX_Z_in, EX_Data_1, EX_Data_2, EX_ALU_Data_Out, EX_C_out, EX_Z_out);
@@ -710,6 +720,7 @@ architecture behave of Pipelined_IITB_RISC is
 	Interface4_10: oneBitRegister port map(EX_Z_out, Interface_4_enable, clear, clock, MA_Z_in);
 	Interface4_11: oneBitRegister port map(EX_Mem_Write, Interface_4_enable, clear, clock, MA_Mem_Write);
 	Interface4_12: oneBitRegister port map(EX_C_Write, Interface_4_enable, clear, clock, MA_C_Write);
+	Interface4_14: oneBitRegister port map(EX_LM_or_SM, Interface_4_enable, clear, clock, MA_LM_or_SM);
 	SigCheckMA: SignalsCheckMA port map(MA_instruction(15 downto 12), MA_Reg_Write_Available, MA_Z_Available, MA_PC_Available);
 	temp14 <=  MA_Valid_Bit and MA_Mem_Write;
 	MemAccess: MemoryAccess port map(MA_instruction(15 downto 12), MA_Data_ALU, MA_Data_Non_ALU, MA_PC,temp14, clock, MA_Data_out);
@@ -727,6 +738,7 @@ architecture behave of Pipelined_IITB_RISC is
 	Interface5_10: oneBitRegister port map(MA_Z_out, Interface_5_enable, clear, clock, WB_Z);
 	Interface5_11: sixteenBitRegister port map(MA_Data_out, Interface_5_enable, clear, clock, WB_Data);
 	Interface5_12: oneBitRegister port map(MA_C_Write, Interface_5_enable, clear, clock, WB_C_Write);
+	Interface5_13: oneBitRegister port map(MA_LM_or_SM, Interface_5_enable, clear, clock, WB_LM_or_SM);
 	SigCheckWB: SignalsCheckWB port map(WB_instruction(15 downto 12), WB_Reg_Write_Available, WB_Z_Available, WB_PC_Available);
 	temp16 <= WB_Reg_Write and WB_Valid_Bit;
 	RegWriteEnable: WriteBack port map(WB_Reg_Write_Add, temp16, R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enable, R7_enable);
@@ -738,7 +750,7 @@ architecture behave of Pipelined_IITB_RISC is
     Reg5: sixteenBitRegister port map(WB_Data, R5_enable, clear, clock, R5);
     Reg6: sixteenBitRegister port map(WB_Data, R6_enable, clear, clock, R6);
 	Reg7: sixteenBitRegister port map(WB_Updated_PC, WB_Valid_Bit, clear, clock, R7);  --DOUBTFUL
-	PCUpdate: UpdatePC port map(WB_PC, WB_PC_Change, WB_Updated_PC);
+	PCUpdate: UpdatePC port map(WB_PC, MA_PC, WB_PC_Change, WB_LM_or_SM, WB_Updated_PC);
 	temp17 <=  WB_Valid_Bit and WB_C_Write;
 	CarryFlag: oneBitRegister port map(WB_C, temp17, clear, clock, C);
 	temp18 <= WB_Valid_Bit and WB_Z_Write;
