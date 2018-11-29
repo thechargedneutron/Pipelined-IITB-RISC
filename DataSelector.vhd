@@ -12,7 +12,7 @@ end DataSelector;
 
 architecture behave of DataSelector is
   begin
-      process(ins, Reg_Data_1, Reg_Data_2, se6, se9spl, pc, se9)
+      process(ins, Reg_Data_1, Reg_Data_2, se6, se9spl, pc, se9, RR_LM_Detect, Temp_Reg)
       begin
 		  case ins(15 downto 12) is
 			  when "0000" => --ADD

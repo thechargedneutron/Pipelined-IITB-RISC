@@ -14,7 +14,7 @@ end GetMAZero;
 
 architecture description of GetMAZero is
 		begin
-			process (z_in, opcode, data)
+			process (z_in, opcode, data, z_mod)
 			begin
 				case opcode is
 					when "0100" =>

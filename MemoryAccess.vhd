@@ -26,7 +26,7 @@ architecture behave of MemoryAccess is
 	signal mem_d_op : STD_LOGIC_VECTOR(15 downto 0);
   begin
 	  mem1: DataMemory port map(alu_out, non_alu_out, mem_write_enable, clock, mem_d_op);
-      process(alu_out, non_alu_out, pc, mem_write_enable, opcode, clock) --Doubtful about the inputs !!
+      process(alu_out, mem_d_op, non_alu_out, pc, mem_write_enable, opcode, clock) --Doubtful about the inputs !!
       begin
 		  case opcode is
 			  when "0000"  => --ADD

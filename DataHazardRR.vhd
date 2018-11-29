@@ -33,34 +33,39 @@ architecture behave of DataHazardRR is
       process(RR_Reg_Read, RR_Reg_Read_Add, RR_Reg_Data, EX_Reg_Write,EX_Reg_Write_Add,EX_Reg_Write_Available, EX_Reg_Data, MA_Reg_Write,MA_Reg_Write_Add,MA_Reg_Write_Available, MA_Reg_Data, WB_Reg_Write,WB_Reg_Write_Add,WB_Reg_Write_Available, WB_Reg_Data, Valid_Bit)
       begin
 		  if Valid_Bit = '1' and RR_Reg_Read = '1' then
-			  if EX_Reg_Write = '1' and EX_Reg_Write_Add = RR_Reg_Read_Add then
-				  if EX_Reg_Write_Available = '1' then
-					  stall <= '0';
-					  data_out <= EX_Reg_Data;
-				  else
-					  stall <= '1';
-					  data_out <= x"0000";
-				  end if;
-			  elsif MA_Reg_Write = '1' and MA_Reg_Write_Add = RR_Reg_Read_Add then
-					if MA_Reg_Write_Available = '1' then
-					  stall <= '0';
-					  data_out <= MA_Reg_Data;
-				  else
-					  stall <= '1';
-					  data_out <= x"0000";
-				  end if;
-				elsif WB_Reg_Write = '1' and WB_Reg_Write_Add = RR_Reg_Read_Add then
-					if WB_Reg_Write_Available = '1' then
-					  stall <= '0';
-					  data_out <= WB_Reg_Data;
-				  else
-					  stall <= '1';
-					  data_out <= x"0000";
-				  end if;
-				else
+				if RR_Reg_Read_Add = "111" then
 					stall <= '0';
 					data_out <= RR_Reg_Data;
-				end if;
+				else
+					  if EX_Reg_Write = '1' and EX_Reg_Write_Add = RR_Reg_Read_Add then
+						  if EX_Reg_Write_Available = '1' then
+							  stall <= '0';
+							  data_out <= EX_Reg_Data;
+						  else
+							  stall <= '1';
+							  data_out <= x"0000";
+						  end if;
+					  elsif MA_Reg_Write = '1' and MA_Reg_Write_Add = RR_Reg_Read_Add then
+							if MA_Reg_Write_Available = '1' then
+							  stall <= '0';
+							  data_out <= MA_Reg_Data;
+						  else
+							  stall <= '1';
+							  data_out <= x"0000";
+						  end if;
+						elsif WB_Reg_Write = '1' and WB_Reg_Write_Add = RR_Reg_Read_Add then
+							if WB_Reg_Write_Available = '1' then
+							  stall <= '0';
+							  data_out <= WB_Reg_Data;
+						  else
+							  stall <= '1';
+							  data_out <= x"0000";
+						  end if;
+						else
+							stall <= '0';
+							data_out <= RR_Reg_Data;
+						end if;
+					end if;
 		  else
 		  	stall <= '0';
 				data_out <= x"0000"; --Dont care
