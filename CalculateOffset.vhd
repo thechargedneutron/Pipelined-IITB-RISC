@@ -10,6 +10,7 @@ entity CalculateOffset is
 end CalculateOffset;
 
 architecture behave of CalculateOffset is
+	constant one_six_bit: STD_LOGIC_VECTOR(5 downto 0) := "000001";
   begin
       process(opcode, offset, PE0)
 			begin
@@ -18,7 +19,7 @@ architecture behave of CalculateOffset is
 						if PE0 ='1' then
 							offset_in <= "000000";
 						else
-							offset_in <= STD_LOGIC_VECTOR(unsigned(offset) + unsigned("000001"));
+							offset_in <= STD_LOGIC_VECTOR(unsigned(offset) + unsigned(one_six_bit));
 						end if;
 					when others =>
 						offset_in <= "000000";

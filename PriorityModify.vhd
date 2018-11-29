@@ -14,7 +14,7 @@ end PriorityModify;
 
 architecture description of PriorityModify is
 		begin
-			process (PriorityEncoderReg, PE_out, current_state)
+			process (PriorityEncoderReg, PE_out, opcode)
 			begin
 				case opcode is
 					when "0110" | "0111" =>
