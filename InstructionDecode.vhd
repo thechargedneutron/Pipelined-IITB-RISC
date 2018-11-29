@@ -2,8 +2,10 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 entity InstructionDecode is
-	port (instruction_in : IN STD_LOGIC_VECTOR(15 downto 0);
-			instruction_dummy_LM: IN STD_LOGIC_VECTOR(15 downto 0);
+
+	port (PE_out : IN STD_LOGIC_VECTOR(2 downto 0);
+				instruction_in : IN STD_LOGIC_VECTOR(15 downto 0);
+				instruction_dummy_LM: IN STD_LOGIC_VECTOR(15 downto 0);
           reg_write: OUT STD_LOGIC;
           reg_write_add: OUT STD_LOGIC_VECTOR(2 downto 0);
 				  reg_read_1: OUT STD_LOGIC;
@@ -21,7 +23,7 @@ end InstructionDecode;
 
 architecture behave of InstructionDecode is
   begin
-      process(instruction_in)
+      process(instruction_in,PE_out,instruction_dummy_LM)
       begin
           case instruction_in(15 downto 12) is
               when "0000" => --ADD
@@ -151,7 +153,7 @@ architecture behave of InstructionDecode is
 
               when "0110" => --LM
 			  	reg_write <= '1';
-                reg_write_add <= instruction_dummy_LM(11 downto 9);
+                reg_write_add <= PE_out;
 								reg_read_1 <= '0';
 								if instruction_dummy_LM(5 downto 0) = "000000" then
 									reg_read_2 <= '1';
